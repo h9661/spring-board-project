@@ -1,25 +1,199 @@
 # study note
 
-# the basics of spring framework
-## what is controller in spring framework?
-- controller is a class that handles http request and response
+## dependency injection
 
-## what is view in spring framework?
-- view is a jsp file that shows the result of controller
+의존성 주입(Dependency Injection)은 소프트웨어 디자인 패턴 중 하나로, 객체 간의 의존성을 외부에서 주입(제공)하는 방식을 의미합니다. 이 패턴은 객체 지향 프로그래밍에서 코드를 더 모듈화하고 유지보수하기 쉽게 만들어주며, 특히 Spring Framework와 같은 프레임워크에서 널리 사용됩니다.
 
-## what is model in spring framework?
-- model is a class that contains data to be used in view
+의존성 주입의 핵심 아이디어는 다음과 같습니다:
 
-## what is dispatcher servlet in spring framework?
-- dispatcher servlet is a servlet that handles all http request and response
+1. **의존성 분리**: 의존성 주입을 통해 객체는 스스로 필요한 의존성(다른 객체 또는 서비스)을 생성하거나 관리하지 않습니다. 대신, 이러한 의존성은 외부에서 주입됩니다.
 
-## what is spring container?
-- spring container is a container that contains all spring beans
+2. **관심사의 분리**: 이 패턴을 사용하면 객체의 주요 비즈니스 로직과 객체 간의 관계를 설정하는 코드를 분리할 수 있습니다. 이로써 코드는 단일 책임 원칙을 준수하게 되며, 유지보수와 테스트가 용이해집니다.
 
-## what is spring bean?
-- spring bean is a class that is managed by spring container
+3. **테스트 용이성**: 의존성 주입은 모의 객체(mock objects) 또는 가짜 객체(fakes)를 사용하여 단위 테스트를 수행하기 쉽게 만듭니다. 주입된 의존성을 간단하게 대체할 수 있으므로 테스트 중에 원하는 동작을 시뮬레이션할 수 있습니다.
 
-## what is spring configuration file?
-- spring configuration file is a xml file that contains spring bean configuration
-- spring configuration file is used to configure spring beans
+Spring Framework와 같은 컨테이너 기반 의존성 주입 프레임워크에서는 주로 다음과 같은 방식으로 의존성을 주입합니다:
 
+1. **Constructor Injection**: 의존성을 클래스의 생성자를 통해 주입합니다. 이는 가장 간단하고 안전한 방법 중 하나로, 객체가 생성될 때 필요한 의존성이 존재해야 한다는 보장을 제공합니다.
+
+ex) 
+```java
+public class Car {
+    private Engine engine;
+
+    public Car(Engine engine) {
+        this.engine = engine;
+    }
+}
+```
+
+
+2. **Setter Injection**: 의존성을 클래스의 setter 메서드를 통해 주입합니다. 이 방법은 선택적인 의존성을 가질 때 유용하며, 객체 생성 후 필요한 의존성을 나중에 설정할 수 있습니다.
+
+ex)
+```java
+public class Car {
+    private Engine engine;
+
+    public void setEngine(Engine engine) {
+        this.engine = engine;
+    }
+}
+```
+
+3. **Method Injection**: 특정 메서드를 호출할 때 의존성을 주입합니다. 이 방식은 객체의 메서드 호출 시에만 필요한 의존성을 제공할 때 사용됩니다.
+
+ex)
+```java
+public class Car {
+    private Engine engine;
+
+    public void start() {
+        engine.start();
+    }
+}
+```
+
+의존성 주입은 코드의 재사용성, 테스트 가능성 및 유지보수성을 향상시키는 데 도움을 주는 중요한 소프트웨어 디자인 원칙 중 하나입니다.
+
+## Maven 이란?
+
+Maven이란 자바용 프로젝트 관리 도구이다.
+
+!https://velog.velcdn.com/images%2Fchangyeonyoo%2Fpost%2Fcf96cb05-8c93-4bbc-8398-2c2ed259a4a2%2Fimg.png
+
+### 빌드란?
+
+프로젝트를 위해 작성한 Java코드나 여러 자원들(.xml, .jar, .properties)를 JVM이나 톰캣같은 WAS가 인식할 수 있는 구조로 패키징 하는 과정 및 결과물이다.
+
+또 단순히 컴파일해주는 작업 뿐만 아니라, 테스팅, 검사, 배포까지 일련의 작업들을 통틀어 빌드라고 한다.
+
+## Maven
+
+[공식 사이트 : Apache Maven Project](https://maven.apache.org/what-is-maven.html)
+
+Maven은 Apache사에서 만든 빌드툴(build tool)이다.
+
+pom.xml파일을 통해 정형화된 빌드 시스템으로 프로젝트 관리를 해준다.
+
+프로젝트의 전체적인 라이프 사이클을 관리한다.
+
+### 특징
+
+- 빌드 과정을 쉽게 만들기
+- 정형화된 빌드 시스템 제공
+- Maven은 POM과 플러그인 세트를 사용하여 프로젝트를 빌드한다.
+- 양질의 프로젝트 정보 제공
+- 더 나은 개발
+
+### 장점
+
+- 편리한 의존성 라이브러리 관리
+- 정해진 빌드 방법을 사용하여 협업에서 유리하게 작용
+- 다양한 플러그인을 통해 많은 작업이 자동화됨
+
+플러그인을 구동해주는 프레임워크로, 모든 작업은 플로그인에서 수행하게된다.
+
+!https://velog.velcdn.com/images%2Fchangyeonyoo%2Fpost%2F8bbf85c9-a73b-4e28-b823-7a54e1d61abb%2F2.png
+
+## Maven LifeCycle
+
+!https://velog.velcdn.com/images%2Fchangyeonyoo%2Fpost%2Fa2b8a6c6-ef83-4a50-983a-217106124323%2Fimage.png
+
+메이븐은 정해진 라이프 사이클을 통해 프로젝트를 빌드한다.
+
+메이븐 라이프 사이클의 종류는 기본, clean, site가 있다.
+
+각 라이프 사이클 안에는 더 작은 단위의 빌드 단계가 정의되어 있는데 이를 phase라고 한다.
+
+!https://velog.velcdn.com/images%2Fchangyeonyoo%2Fpost%2Fde249c76-f662-4a6b-b7e5-34235db1048e%2F%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.jpg
+
+`phase`는 논리적인 빌드 단계이고, 실제로는 `phase`에 연결된 `plug-in`있고 `plug-in`이 수행하는 명령을 `goal`이라고 한다.
+
+라이프 사이클의 세부 순서와 설명은 [이 블로그](https://sjh836.tistory.com/131) 를 참조하면 좋다.
+
+`요약하자면 빌드 순서는 Compile - Test - Package 이다.`
+
+Clean -> init -> compile -> test-compile -> test -> package -> integration-test -> verify -> install -> deploy -> site
+
+## Maven 설정 파일
+
+### settings.xml
+
+- 메이븐 빌드 툴과 관련된 설정파일
+- `Maven_HOME/conf`에 위치
+
+### POM
+
+프로젝트마다 하나의 pom.xml파일이 있다.
+
+프로젝트의 모든 설정, 의존성 등을 설정할 수 있다.
+
+pom.xml의 엘리트먼트에 대한 설명은 [이 블로그](https://goddaehee.tistory.com/199)를 참고하면 좋다.
+
+### pom.xml 엘리트먼트
+
+```xml
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>kr.or.connect</groupId>
+    <artifactId>examples</artifactId>
+    <packaging>jar</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <name>mysample</name>
+    <url>http://maven.apache.org</url>
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>
+```
+
+- project : pom.xml 파일의 최상위 루트 엘리먼트(Root Element)입니다.
+- modelVersion : POM model의 버전입니다.
+- groupId : 프로젝트를 생성하는 조직의 고유 아이디를 결정합니다. 일반적으로 도메인 이름을 거꾸로 적습니다.
+- artifactId : 해당 프로젝트에 의하여 생성되는 artifact의 고유 아이디를 결정합니다. Maven을 이용하여 pom.xml을 빌드할 경우 다음과 같은 규칙으로 artifact가 생성됩니다. artifactid-version.packaging. 위 예의 경우 빌드할 경우 examples-1.0-SNAPSHOT.jar 파일이 생성됩니다.
+- packaging : 해당 프로젝트를 어떤 형태로 packaging 할 것인지 결정합니다. jar, war, ear 등이 해당됩니다.version : 프로젝트의 현재 버전. 추후 살펴보겠지만 프로젝트가 개발 중일 때는 SNAPSHOT을 접미사로 사용합니다. Maven의 버전 관리 기능은 라이브러리 관리를 편하게 합니다.
+- name : 프로젝트의 이름입니다.
+- url : 프로젝트 사이트가 있다면 사이트 URL을 등록하는 것이 가능합니다.
+
+해당 엘리먼트 안에 필요한 라이브러리를 지정하게 됩니다.
+
+## Application Context
+https://mangkyu.tistory.com/151
+
+## spring.xml
+https://velog.io/@junbee/SpringMVC-%EA%B8%B0%EB%B3%B8-xml-%ED%8C%8C%EC%9D%BC-%EC%84%A4%EB%AA%85
+
+## actuator
+Spring Boot Actuator는 Spring Boot 기반 애플리케이션의 운영 환경에서 모니터링 및 관리를 위한 기능을 제공하는 확장 기능입니다. 이를 통해 애플리케이션의 상태, 상태 지표, 환경 설정 등을 관찰하고 관리할 수 있습니다. Spring Boot Actuator는 애플리케이션의 운영 측면에서 중요한 도구로 사용됩니다.
+
+Spring Boot Actuator가 제공하는 주요 기능과 엔드포인트는 다음과 같습니다:
+
+1. **Health Endpoint**: `/actuator/health`
+    - 애플리케이션의 상태를 나타내는 엔드포인트로, 애플리케이션의 상태가 "UP" 또는 "DOWN"으로 표시됩니다. 데이터베이스 연결, 메시지 큐 연결 등과 같은 외부 리소스와의 연결 상태를 확인할 때 유용합니다.
+
+2. **Info Endpoint**: `/actuator/info`
+    - 애플리케이션에 대한 추가 정보를 제공하는 엔드포인트로, 버전 정보, 환경 설정 값, 사용자 정의 메타데이터 등을 포함할 수 있습니다.
+
+3. **Metrics Endpoint**: `/actuator/metrics`
+    - 메트릭 정보를 조회하는 엔드포인트로, 애플리케이션의 성능 및 상태 지표를 모니터링할 수 있습니다. 예를 들어, 메모리 사용량, HTTP 요청 수, 데이터베이스 쿼리 실행 횟수 등의 지표를 확인할 수 있습니다.
+
+4. **Trace Endpoint**: `/actuator/trace`
+    - HTTP 요청의 추적 정보를 조회하는 엔드포인트로, 요청과 응답의 상세 정보를 확인할 수 있습니다. 디버깅 및 문제 해결에 유용합니다.
+
+5. **Environment Endpoint**: `/actuator/env`
+    - 애플리케이션의 환경 설정을 조회하는 엔드포인트로, 프로퍼티 및 환경 변수 등의 설정 정보를 확인할 수 있습니다.
+
+6. **Shutdown Endpoint**: `/actuator/shutdown`
+    - 애플리케이션을 graceful하게 종료하기 위한 엔드포인트입니다. 보안을 위해 기본적으로 비활성화되어 있으며, 활성화하려면 추가 설정이 필요합니다.
+
+Spring Boot Actuator는 운영 환경에서 애플리케이션의 상태를 실시간으로 모니터링하고 문제를 진단하며, 애플리케이션의 성능을 개선하는 데 도움을 줍니다. 이러한 기능은 애플리케이션을 운영하고 유지보수하는 과정에서 매우 유용합니다.
+
+## `management.endpoints.web.exposure.include: "*"`
