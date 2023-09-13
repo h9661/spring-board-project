@@ -196,4 +196,7 @@ Spring Boot Actuator가 제공하는 주요 기능과 엔드포인트는 다음�
 
 Spring Boot Actuator는 운영 환경에서 애플리케이션의 상태를 실시간으로 모니터링하고 문제를 진단하며, 애플리케이션의 성능을 개선하는 데 도움을 줍니다. 이러한 기능은 애플리케이션을 운영하고 유지보수하는 과정에서 매우 유용합니다.
 
-## `management.endpoints.web.exposure.include: "*"`
+## post 데이터 받기
+node는 bodyParser의 도움을 받아서 req.body에 데이터를 넣어주는 반면, spring은 데이터를 Controller 매개변수에 다 넣어서 준다. 편하게 그냥 객체를 넣으면, 알아서 해당 객체의 변수에 맞게 데이터를 넣어준다.
+그게 싫으면 그냥 form의 name에 맞게 매개변수를 만들어서 받아주면 된다.
+
