@@ -262,3 +262,7 @@ public class SearchController {
 이후, `search` 메서드는 `Model`에 검색 결과를 추가하고, `searchResults`라는 뷰로 이동합니다. 검색 결과는 해당 뷰에서 표시될 수 있습니다.
 
 URL에서 Query Parameter를 전달하려면 `/search?query=Spring&category=programming`와 같이 URL에 Query Parameter를 포함시키면 됩니다. 이러한 Query Parameter를 컨트롤러 메서드의 파라미터로 수신하고 처리할 수 있습니다.
+
+## 타임리프 사용법
+태그에 SSR 속성 만들기 -> th:attr=${}
+동적 url 생성 -> <th:action or th:href>="@{abcd/{var}(var=${...})}"
