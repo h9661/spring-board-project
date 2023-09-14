@@ -3,12 +3,10 @@ package com.example.demo.controllers;
 import com.example.demo.entity.Board;
 import com.example.demo.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/board")
@@ -48,5 +46,13 @@ public class BoardController {
         System.out.println(updatedBoard.toString());
 
         return "redirect:/board/list";
+    }
+
+    @PostMapping("/{id}/delete")
+    @ResponseBody
+    public ResponseEntity<Board> deleteBoard(@PathVariable Integer id) {
+        Board deletedBoard = boardService.deleteBoard(id);
+
+        return ResponseEntity.ok(deletedBoard);
     }
 }

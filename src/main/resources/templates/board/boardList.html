@@ -18,10 +18,35 @@
                     <td th:text="${board.id}"></td>
                     <td>
                         <a th:href="@{/board/{id}(id=${board.id})}" th:text="${board.title}"></a>
+                        <button>삭제</button>
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
+
+    <script>
+        document.querySelectorAll('button').forEach(function (button) {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+                var boardId = event.target.parentNode.parentNode.querySelector('td').innerText;
+
+                fetch('/board/' + boardId + '/delete', {
+                    method: 'POST'
+                }).then(async function (response) {
+                    if (response.ok) {
+                        let data = await response.json();
+
+                        alert(`id: ${data.id}, title: ${data.title} content: ${data.content} 삭제 성공!!`);
+                        window.location.reload();
+                        return;
+                    }
+                    throw new Error('삭제에 실패하였습니다.');
+                }).catch(function (error) {
+                    alert(error.message);
+                });
+            });
+        });
+    </script>
 </body>
 </html>

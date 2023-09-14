@@ -36,4 +36,16 @@ public class BoardService {
             return boardRepository.save(boardToUpdate);
         }
     }
+
+    public Board deleteBoard(Integer id){
+        Board boardToDelete = boardRepository.findById(id).orElse(null);
+
+        if(boardToDelete == null) {
+            return null;
+        } else{
+            boardRepository.delete(boardToDelete);
+
+            return boardToDelete;
+        }
+    }
 }
