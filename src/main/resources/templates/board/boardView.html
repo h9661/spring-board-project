@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>board View</title>
+</head>
+<body>
+    <div class="layout">
+        <h1 th:text="${board.title}"></h1>
+        <p th:text="${board.content}"></p>
+        <a th:href="@{/board/list}">목록</a>
+    </div>
+</body>
+</html>
