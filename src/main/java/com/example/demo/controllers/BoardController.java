@@ -40,4 +40,13 @@ public class BoardController {
 
         return "board/boardView";
     }
+
+    @PostMapping("/{id}")
+    public String updateBoard(@PathVariable Integer id, Board board) {
+        Board updatedBoard = boardService.updateBoard(id, board);
+
+        System.out.println(updatedBoard.toString());
+
+        return "redirect:/board/list";
+    }
 }

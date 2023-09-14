@@ -23,4 +23,17 @@ public class BoardService {
     public Board getBoard(Integer id) {
         return boardRepository.findById(id).orElse(null);
     }
+
+    public Board updateBoard(Integer id, Board board){
+        Board boardToUpdate = boardRepository.findById(id).orElse(null);
+
+        if(boardToUpdate == null) {
+            return null;
+        } else{
+            boardToUpdate.setTitle(board.getTitle());
+            boardToUpdate.setContent(board.getContent());
+
+            return boardRepository.save(boardToUpdate);
+        }
+    }
 }
