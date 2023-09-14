@@ -263,6 +263,19 @@ public class SearchController {
 
 URL에서 Query Parameter를 전달하려면 `/search?query=Spring&category=programming`와 같이 URL에 Query Parameter를 포함시키면 됩니다. 이러한 Query Parameter를 컨트롤러 메서드의 파라미터로 수신하고 처리할 수 있습니다.
 
-## 타임리프 사용법
+## 타임리프로 Model에서 받은 값으로 동적 속성 url 만들기
 태그에 SSR 속성 만들기 -> th:attr=${}
 동적 url 생성 -> <th:action or th:href>="@{abcd/{var}(var=${...})}"
+
+## 타임리프로 Model에서 받은 값으로 html 자바스크립트에서 사용하기
+```
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var message = [[${message}]];
+    var url = [[${url}]];
+
+    alert(message);
+    location.replace(url);
+    /*]]>*/
+</script>
+```
