@@ -72,6 +72,46 @@ public class UserService {
 
 이러한 어노테이션들을 사용하면 웹 요청과 응답 데이터를 쉽게 다룰 수 있으며, 데이터 변환 및 직렬화를 자동으로 처리할 수 있어서 개발자가 복잡한 작업을 수동으로 수행할 필요가 없습니다.
 
+## @PathVariable
+`@PathVariable`은 Spring Framework에서 웹 요청의 URL 경로에서 변수를 추출하고 컨트롤러 메서드의 파라미터에 주입하는데 사용되는 어노테이션입니다. 이를 통해 동적인 URL 경로를 처리하고 해당 값을 사용하여 원하는 동작을 수행할 수 있습니다.
+
+간단한 예제를 통해 `@PathVariable`의 사용법을 보여드리겠습니다.
+
+```java
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+@Controller
+public class MyController {
+
+    @GetMapping("/hello/{name}")
+    public String sayHello(@PathVariable String name) {
+        // URL 경로에서 추출한 변수(name)를 사용하여 메시지를 생성
+        String message = "Hello, " + name + "!";
+        return "greeting"; // 뷰 이름 (greeting.html)을 반환
+    }
+}
+```
+
+위의 예제에서 `/hello/{name}` 경로로 요청이 들어오면 `sayHello` 메서드가 실행됩니다. `@PathVariable` 어노테이션은 `name` 파라미터와 경로 변수를 연결합니다. 예를 들어, `/hello/John`에 요청하면 `name` 파라미터에 "John"이 주입되어 "Hello, John!"과 같은 메시지가 생성됩니다.
+
+뷰 템플릿(greeting.html)에서는 이 메시지를 표시할 수 있습니다.
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Greeting Page</title>
+</head>
+<body>
+    <h1 th:text="${message}"></h1>
+</body>
+</html>
+```
+
+위의 뷰 템플릿에서 `${message}`는 `sayHello` 메서드에서 생성한 메시지를 출력하는 데 사용됩니다. 이렇게 함으로써 URL 경로의 변수를 추출하고 컨트롤러에서 처리하는 방법을 보여줍니다.
+
 # Repository annotation 정리
 ## @Repository
 `@Repository`는 Spring Framework에서 사용되는 어노테이션으로, 주로 데이터 액세스 계층에서 데이터베이스와의 상호 작용을 담당하는 클래스에 적용됩니다. 이 어노테이션은 Spring의 컴포넌트 스캔 기능과 함께 사용되어 빈으로 등록되며, 데이터 액세스 관련 예외를 스프링의 DataAccessException으로 변환해줍니다.

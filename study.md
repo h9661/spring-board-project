@@ -200,3 +200,65 @@ Spring Boot Actuator는 운영 환경에서 애플리케이션의 상태를 실�
 node는 bodyParser의 도움을 받아서 req.body에 데이터를 넣어주는 반면, spring은 데이터를 Controller 매개변수에 다 넣어서 준다. 편하게 그냥 객체를 넣으면, 알아서 해당 객체의 변수에 맞게 데이터를 넣어준다.
 그게 싫으면 그냥 form의 name에 맞게 매개변수를 만들어서 받아주면 된다.
 
+## Model
+`Model`은 Spring Framework에서 웹 애플리케이션의 데이터를 처리하고 뷰(View)에 전달하는 데 사용되는 인터페이스입니다. 주로 Spring MVC (Model-View-Controller) 아키텍처에서 컨트롤러(Controller)와 뷰(View) 사이에서 데이터를 전달하는 역할을 합니다.
+
+`Model` 인터페이스는 `addAttribute(String attributeName, Object attributeValue)` 메서드를 통해 데이터를 저장하고, 이 데이터는 뷰에 전달됩니다. 이렇게 저장된 데이터는 HTML 템플릿에서 변수처럼 사용할 수 있으며, 동적 웹 페이지를 생성할 때 유용합니다.
+
+간단한 Spring MVC 컨트롤러에서 `Model`을 사용한 예제를 보여드리겠습니다:
+
+```java
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@Controller
+public class SampleController {
+
+    @GetMapping("/hello")
+    public String hello(Model model) {
+        // Model을 사용하여 데이터를 저장하고 뷰에 전달
+        model.addAttribute("message", "Hello, Spring MVC!");
+        return "hello"; // 뷰 이름 (hello.html)을 반환
+    }
+}
+```
+
+위의 예제에서 `/hello` 경로로 요청이 들어오면 `hello` 메서드가 실행되고, `Model`을 통해 "message"라는 속성에 "Hello, Spring MVC!" 문자열을 저장합니다. 그리고 "hello" 문자열을 반환하면 이것은 뷰 이름을 나타내며, Spring은 "hello.html" 뷰 템플릿을 렌더링하면서 `Model`에 저장된 데이터를 뷰에 전달합니다.
+
+`hello.html` 뷰 템플릿에서는 `${message}`와 같이 `${}` 표현식을 사용하여 `Model`에 저장된 데이터를 출력할 수 있습니다.
+
+## 쿼리 파라미터 받는 법
+Spring에서 Query Parameter를 사용하기 위해서는 주로 `@RequestParam` 어노테이션을 컨트롤러 메서드의 파라미터에 적용합니다. Query Parameter는 URL 뒤에 `?`를 사용하여 전달되는 이름-값 쌍의 데이터입니다. 예를 들어, `/search?query=Spring&category=programming`와 같은 URL에서 `query`와 `category`가 Query Parameter입니다.
+
+아래는 Spring에서 Query Parameter를 사용하는 예제와 설명입니다:
+
+```java
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.ui.Model;
+
+@Controller
+public class SearchController {
+
+    @GetMapping("/search")
+    public String search(@RequestParam(name = "query", required = false) String query,
+                         @RequestParam(name = "category", required = false) String category,
+                         Model model) {
+        // query와 category를 사용하여 검색 작업 수행
+
+        // 검색 결과를 모델에 추가
+        model.addAttribute("query", query);
+        model.addAttribute("category", category);
+
+        return "searchResults"; // 검색 결과를 표시하는 뷰로 이동
+    }
+}
+```
+
+위의 예제에서 `/search` 경로로 GET 요청이 들어오면 `search` 메서드가 실행됩니다. 이 메서드는 `@RequestParam` 어노테이션을 사용하여 `query`와 `category` Query Parameter를 파라미터로 받습니다. `name` 속성을 사용하여 Query Parameter의 이름을 지정하고, `required` 속성을 사용하여 필수 여부를 지정할 수 있습니다. `required = false`로 설정하면 해당 Query Parameter가 없는 경우에도 메서드가 실행됩니다.
+
+이후, `search` 메서드는 `Model`에 검색 결과를 추가하고, `searchResults`라는 뷰로 이동합니다. 검색 결과는 해당 뷰에서 표시될 수 있습니다.
+
+URL에서 Query Parameter를 전달하려면 `/search?query=Spring&category=programming`와 같이 URL에 Query Parameter를 포함시키면 됩니다. 이러한 Query Parameter를 컨트롤러 메서드의 파라미터로 수신하고 처리할 수 있습니다.
