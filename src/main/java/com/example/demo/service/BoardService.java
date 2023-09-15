@@ -17,7 +17,7 @@ public class BoardService {
 
     public void writeBoard(Board board, MultipartFile file) throws Exception {
         if(file != null) {
-            String fileSavingPath = System.getProperty("user.dir") + "/src/main/resources/static/files";
+            String fileSavingPath = System.getProperty("user.dir") + "/files/";
             UUID uuid = UUID.randomUUID();
             String fileName = uuid.toString() + "_" + file.getOriginalFilename();
 
