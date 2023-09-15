@@ -19,10 +19,24 @@
                 파일
                 <input type="file" name="file" accept="image/*">
             </label>
-            <img id="img-preview" th:src="@{/files/{filename}(filename=${board.filename})}" style="display: block;" width="250" alt="미리보기">
+            <img id="img-preview" th:src="@{{filepath}(filepath=${board.filepath})}" style="display: block;" width="250" alt="미리보기">
             <button type="submit">수정하기</button>
         </form>
         <a th:href="@{/board/list}">목록</a>
     </div>
+
+    <script>
+        document.querySelector('input[type="file"]').addEventListener('change', function (event) {
+            var img = document.querySelector('#img-preview');
+            var file = event.target.files[0];
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                img.setAttribute('src', e.target.result);
+            };
+
+            reader.readAsDataURL(file);
+        });
+    </script>
 </body>
 </html>
