@@ -335,3 +335,33 @@ MySQL에서 테이블을 변경하는 방법은 여러 가지가 있습니다. �
 1. <input type="file" name="file"> 태그로 파일 입력 받기
 2. @RequestParam("file") MultipartFile file Controller에서 파일 받기
 3. service에서 파일 처리하는 로직 작성하기. 파일 저장될 경로 설정, 파일 이름 설정, 파일 저장 등..(코드 참고)
+
+
+## 사진 업로드 미리보기
+```jsx
+document.querySelector('input[type="file"]').addEventListener('change', function (event) {
+   var img = document.querySelector('#img-preview');
+   var file = event.target.files[0];
+   var reader = new FileReader();
+
+   reader.onload = function (e) {
+       img.setAttribute('src', e.target.result);
+   };
+
+   reader.readAsDataURL(file);
+});
+```
+
+## 파일 저장 경로 설정법(configuration)
+```java
+@Configuration
+public class WebMVCConfig implements WebMvcConfigurer {
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry){
+        registry.addResourceHandler("/files/**")
+                .addResourceLocations("file:///C:/Users/gusck/spring 프로젝트/demo/files/");
+    }
+
+}
+```
+static에 파일을 보관하면, 서버 실행 시 한번만 로드하기 때문에 동적으로 파일을 불러올 수 없다. 따라서 이렇게 파일을 저장하는 곳을 따로 둬야 동적으로 파일들을 불러올 수 있다.
