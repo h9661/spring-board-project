@@ -112,6 +112,36 @@ public class MyController {
 
 위의 뷰 템플릿에서 `${message}`는 `sayHello` 메서드에서 생성한 메시지를 출력하는 데 사용됩니다. 이렇게 함으로써 URL 경로의 변수를 추출하고 컨트롤러에서 처리하는 방법을 보여줍니다.
 
+## @RequestParam
+`@RequestParam`은 Spring Framework에서 사용되는 어노테이션 중 하나로, HTTP 요청의 파라미터를 메서드의 파라미터로 바인딩하는 데 사용됩니다. 주로 웹 애플리케이션의 컨트롤러 메서드에서 사용되며, HTTP 요청의 쿼리 문자열(query string)이나 POST 요청의 폼 데이터를 가져오는 데에 쓰입니다.
+
+`@RequestParam` 어노테이션을 사용하면 다음과 같이 HTTP 요청 파라미터를 컨트롤러 메서드의 파라미터에 연결할 수 있습니다.
+
+```java
+@GetMapping("/example")
+public String exampleMethod(@RequestParam("paramName") String parameterValue) {
+    // parameterValue 변수에 HTTP 요청 파라미터 "paramName"의 값이 할당됨
+    // 이 메서드 내에서 parameterValue 변수 사용 가능
+    // ...
+}
+```
+
+여기서 `@RequestParam("paramName")`은 HTTP 요청에서 "paramName"이라는 파라미터 이름에 해당하는 값을 `parameterValue` 변수에 할당합니다. 이렇게 함으로써 컨트롤러 메서드 내에서 해당 파라미터 값을 사용할 수 있습니다.
+
+`@RequestParam` 어노테이션에는 다양한 옵션과 속성을 사용할 수 있습니다. 예를 들어, 파라미터의 기본값을 설정하거나 필수 파라미터로 지정하거나 여러 값을 배열로 받을 수 있습니다.
+
+예를 들어, 파라미터 기본값을 설정한 예제:
+
+```java
+@GetMapping("/example")
+public String exampleMethod(@RequestParam(value = "paramName", defaultValue = "default") String parameterValue) {
+    // "paramName" 파라미터가 없는 경우 기본값 "default"이 할당됨
+    // ...
+}
+```
+
+`@RequestParam` 어노테이션은 Spring MVC와 함께 주로 사용되며, HTTP 요청의 파라미터 값을 컨트롤러 메서드로 가져오는데 유용합니다.
+
 # Repository annotation 정리
 ## @Repository
 `@Repository`는 Spring Framework에서 사용되는 어노테이션으로, 주로 데이터 액세스 계층에서 데이터베이스와의 상호 작용을 담당하는 클래스에 적용됩니다. 이 어노테이션은 Spring의 컴포넌트 스캔 기능과 함께 사용되어 빈으로 등록되며, 데이터 액세스 관련 예외를 스프링의 DataAccessException으로 변환해줍니다.

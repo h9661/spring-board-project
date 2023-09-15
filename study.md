@@ -228,7 +228,7 @@ public class SampleController {
 
 `hello.html` 뷰 템플릿에서는 `${message}`와 같이 `${}` 표현식을 사용하여 `Model`에 저장된 데이터를 출력할 수 있습니다.
 
-## 쿼리 파라미터 받는 법
+## 쿼리 파라미터 받는 법 @RequestParam
 Spring에서 Query Parameter를 사용하기 위해서는 주로 `@RequestParam` 어노테이션을 컨트롤러 메서드의 파라미터에 적용합니다. Query Parameter는 URL 뒤에 `?`를 사용하여 전달되는 이름-값 쌍의 데이터입니다. 예를 들어, `/search?query=Spring&category=programming`와 같은 URL에서 `query`와 `category`가 Query Parameter입니다.
 
 아래는 Spring에서 Query Parameter를 사용하는 예제와 설명입니다:
@@ -279,3 +279,59 @@ URL에서 Query Parameter를 전달하려면 `/search?query=Spring&category=prog
     /*]]>*/
 </script>
 ```
+
+## 테이블 ALTER 예시들
+MySQL에서 테이블을 변경하는 방법은 여러 가지가 있습니다. 테이블을 변경하려면 다음과 같은 일반적인 작업을 수행할 수 있습니다.
+
+1. **열 추가하기:**
+   ```sql
+   ALTER TABLE table_name
+   ADD column_name datatype;
+   ```
+
+2. **열 수정하기:**
+   ```sql
+   ALTER TABLE table_name
+   MODIFY column_name new_datatype;
+   ```
+
+3. **열 삭제하기:**
+   ```sql
+   ALTER TABLE table_name
+   DROP COLUMN column_name;
+   ```
+
+4. **기본 키 추가하기:**
+   ```sql
+   ALTER TABLE table_name
+   ADD PRIMARY KEY (column_name);
+   ```
+
+5. **외래 키 추가하기:**
+   ```sql
+   ALTER TABLE table_name
+   ADD FOREIGN KEY (column_name) REFERENCES referenced_table(referenced_column);
+   ```
+
+6. **테이블 이름 변경하기:**
+   ```sql
+   RENAME TABLE old_table_name TO new_table_name;
+   ```
+
+7. **테이블 삭제하기:**
+   ```sql
+   DROP TABLE table_name;
+   ```
+
+8. **테이블 엔진 변경하기:**
+   ```sql
+   ALTER TABLE table_name
+   ENGINE = new_engine;
+   ```
+
+이 명령어를 사용하여 필요한 변경을 수행할 수 있습니다. SQL 쿼리를 실행할 때 주의해야 하며, 중요한 데이터를 변경하기 전에 백업을 만드는 것이 좋습니다. 변경 내용은 신중하게 검토하고 테스트한 후에 적용해야 합니다.
+
+## file 업로드하기
+1. <input type="file" name="file"> 태그로 파일 입력 받기
+2. @RequestParam("file") MultipartFile file Controller에서 파일 받기
+3. service에서 파일 처리하는 로직 작성하기. 파일 저장될 경로 설정, 파일 이름 설정, 파일 저장 등..(코드 참고)
