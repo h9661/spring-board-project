@@ -6,7 +6,7 @@
 </head>
 <body>
     <div class="layout">
-        <form th:action="@{/board/{id}(id=${board.id})}" method="post">
+        <form th:action="@{/board/{id}/update(id=${board.id})}" method="post" enctype="multipart/form-data">
             <label>
                 제목
                 <input type="text" th:value="${board.title}" name="title">
@@ -15,6 +15,11 @@
                 내용
                 <textarea th:text="${board.content}" name="content"></textarea>
             </label>
+            <label>
+                파일
+                <input type="file" name="file" accept="image/*">
+            </label>
+            <img id="img-preview" th:src="@{/files/{filename}(filename=${board.filename})}" style="display: block;" width="250" alt="미리보기">
             <button type="submit">수정하기</button>
         </form>
         <a th:href="@{/board/list}">목록</a>

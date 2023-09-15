@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("/board")
@@ -20,8 +21,8 @@ public class BoardController {
     }
 
     @PostMapping("/write")
-    public String newBoard(Board board, Model model) {
-        boardService.writeBoard(board);
+    public String writeBoard(Board board, MultipartFile file, Model model) throws Exception{
+        boardService.writeBoard(board, file);
 
         model.addAttribute("message", "게시글이 등록되었습니다.");
         model.addAttribute("url", "/board/list");
@@ -43,11 +44,13 @@ public class BoardController {
         return "board/boardView";
     }
 
-    @PostMapping("/{id}")
-    public String updateBoard(@PathVariable Integer id, Board board) {
-        Board updatedBoard = boardService.updateBoard(id, board);
+    @PostMapping("/{id}/update")
+    public String updateBoard(@PathVariable Integer id, Board board, MultipartFile file) throws Exception {
+        Board boardToUpdate = boardService.getBoard(id);
+        boardToUpdate.setTitle(board.getTitle());
+        boardToUpdate.setContent(board.getContent());
 
-        System.out.println(updatedBoard.toString());
+        boardService.writeBoard(boardToUpdate, file);
 
         return "redirect:/board/list";
     }
