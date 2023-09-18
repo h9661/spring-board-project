@@ -1,3 +1,10 @@
+# 나만의 체크 포인트
+
+- [x] 글 crud 구현
+- [ ] 페이징 구현
+- [ ] 사진 여러개 또는 동영상 여러개 올리는 기능 구현. 지금은 사진/파일 하나밖에 안됨
+- [ ] 이후 작성 예정
+
 # study note
 
 ## dependency injection
@@ -351,6 +358,26 @@ document.querySelector('input[type="file"]').addEventListener('change', function
    reader.readAsDataURL(file);
 });
 ```
+이 코드는 HTML과 JavaScript를 사용하여 파일 업로드(input 태그) 이벤트를 처리하고, 선택한 이미지 파일을 미리보기로 표시하는 간단한 스크립트입니다. 코드의 주요 부분을 설명하겠습니다:
+
+1. `document.querySelector('input[type="file"]')`: HTML 문서에서 `input` 요소 중 `type`이 "file"인 요소를 선택합니다. 이것은 파일 업로드를 위한 `<input type="file">` 요소를 선택하는 것입니다.
+
+2. `addEventListener('change', function (event) { ... })`: 파일 업로드 input 요소에 'change' 이벤트 리스너를 추가합니다. 이 이벤트는 사용자가 파일을 선택하고 업로드 input의 값이 변경될 때 발생합니다.
+
+3. `var img = document.querySelector('#img-preview');`: HTML 문서에서 `id`가 "img-preview"인 이미지 요소를 선택합니다. 이 이미지는 선택한 파일의 미리보기를 표시할 때 사용됩니다.
+
+4. `var file = event.target.files[0];`: 이벤트 객체인 `event`의 `target`에서 선택한 파일 목록을 가져온 후, 첫 번째 파일을 선택합니다. 이 코드는 하나의 파일만 업로드하는 경우에 사용됩니다.
+
+5. `var reader = new FileReader();`: `FileReader` 객체를 생성합니다. 이 객체는 파일을 읽는 데 사용됩니다.
+
+6. `reader.onload = function (e) { ... }`: `FileReader` 객체의 `onload` 이벤트 핸들러를 정의합니다. 파일이 읽혔을 때 실행됩니다.
+
+7. `reader.readAsDataURL(file);`: `FileReader`를 사용하여 선택한 파일(`file`)을 데이터 URL로 읽어옵니다. 이 데이터 URL은 이미지 파일을 Base64로 인코딩한 문자열입니다.
+
+8. `img.setAttribute('src', e.target.result);`: 읽어온 데이터 URL(`e.target.result`)을 이미지(`img`)의 `src` 속성에 설정하여 미리보기 이미지로 표시합니다.
+
+이 코드는 파일 업로드 input에서 파일을 선택하면 해당 파일을 읽어 미리보기 이미지로 표시합니다. 이러한 미리보기 기능은 사용자 경험을 향상시키고 업로드할 파일이 올바른지 미리 확인할 때 유용합니다.
+
 
 ## 파일 저장 경로 설정법(configuration)
 ```java
