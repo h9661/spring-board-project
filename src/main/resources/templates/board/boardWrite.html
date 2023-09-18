@@ -11,7 +11,23 @@
           <textarea name="content"></textarea>
           <input type="file" name="file" accept="image/*">
           <button type="submit">작성</button>
+          <img id="img-preview" style="display: none;" width="250" alt="미리보기">
       </form>
   </div>
+
+  <script>
+      document.querySelector('input[type="file"]').addEventListener('change', function (event) {
+          var img = document.querySelector('#img-preview');
+          var file = event.target.files[0];
+          var reader = new FileReader();
+
+          reader.onload = function (e) {
+              img.setAttribute('src', e.target.result);
+              img.style.display = 'block';
+          };
+
+          reader.readAsDataURL(file);
+      });
+  </script>
 </body>
 </html>
