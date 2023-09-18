@@ -16,7 +16,8 @@ public class BoardService {
     private BoardRepository boardRepository;
 
     public void writeBoard(Board board, MultipartFile file) throws Exception {
-        if(file != null) {
+        // 파일이 존재하면 파일을 저장하고, 파일 이름과 경로를 board 객체에 저장한다.
+        if(file != null && !file.isEmpty()) {
             String fileSavingPath = System.getProperty("user.dir") + "/files/";
             UUID uuid = UUID.randomUUID();
             String fileName = uuid.toString() + "_" + file.getOriginalFilename();
