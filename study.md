@@ -392,3 +392,42 @@ public class WebMVCConfig implements WebMvcConfigurer {
 }
 ```
 static에 파일을 보관하면, 서버 실행 시 한번만 로드하기 때문에 동적으로 파일을 불러올 수 없다. 따라서 이렇게 파일을 저장하는 곳을 따로 둬야 동적으로 파일들을 불러올 수 있다.
+
+## N:1 연관
+```java
+@Entity
+@Data
+public class Board {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    private String title;
+    private String content;
+
+    // 1:n 관계 with Image
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    private List<Image> images;
+}
+```
+
+```java
+@Entity
+@Data
+public class Image {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    private String filename;
+    private String filepath;
+
+    // n:1 관계 with Board
+    @ManyToOne
+    @JoinColumn(name = "board_id")
+    private Board board;
+}
+```
+
+## 파일을 여러개 업로드하는 법
+https://cbw1030.tistory.com/391
+
