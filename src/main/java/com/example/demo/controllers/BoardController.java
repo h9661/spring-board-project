@@ -1,5 +1,6 @@
 package com.example.demo.controllers;
 
+import com.example.demo.DTO.ImageFiles;
 import com.example.demo.entity.Board;
 import com.example.demo.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,10 @@ public class BoardController {
     }
 
     @PostMapping("/write")
-    public String writeBoard(Board board, MultipartFile file, Model model) throws Exception{
-        boardService.writeBoard(board, file);
+    public String writeBoard(Board board, @ModelAttribute ImageFiles imageFiles, Model model) throws Exception{
+        imageFiles.getImageFiles().forEach(imageFile -> {
+            System.out.println(imageFile.getOriginalFilename());
+        });
 
         model.addAttribute("message", "게시글이 등록되었습니다.");
         model.addAttribute("url", "/board/list");
@@ -50,7 +53,8 @@ public class BoardController {
         boardToUpdate.setTitle(board.getTitle());
         boardToUpdate.setContent(board.getContent());
 
-        boardService.writeBoard(boardToUpdate, file);
+        // todo: boardService.writeBoard 수정하기
+        // boardService.writeBoard(boardToUpdate, file);
 
         return "redirect:/board/list";
     }
