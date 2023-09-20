@@ -395,3 +395,21 @@ static에 파일을 보관하면, 서버 실행 시 한번만 로드하기 때�
 
 ## 파일을 여러개 업로드하는 법
 https://cbw1030.tistory.com/391
+
+## 스프링 파일 업로드 제한 해제 방법
+스프링은 파일 업로드하는 데에 제약이 있다 이것을 바꾸는 방법을 알아보자.
+
+   ```java
+   @Configuration
+   public class FileUploadConfig {
+   
+       @Bean
+       public MultipartConfigElement multipartConfigElement(){
+           MultipartConfigFactory factory = new MultipartConfigFactory();
+           factory.setMaxFileSize(DataSize.ofMegabytes(10L));
+           factory.setMaxRequestSize(DataSize.ofMegabytes(10L));
+   
+           return factory.createMultipartConfig();
+       }
+   }
+   ```
