@@ -31,4 +31,16 @@ public class ImageService {
 
         return imageRepository.save(image);
     }
+
+    public Image deleteById(Integer id) {
+        Image imageToDelete = imageRepository.findById(id).orElse(null);
+
+        if(imageToDelete == null) {
+            return null;
+        } else {
+            imageRepository.delete(imageToDelete);
+
+            return imageToDelete;
+        }
+    }
 }
