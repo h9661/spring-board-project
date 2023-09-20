@@ -1,8 +1,10 @@
 package com.example.demo.controllers;
 
-import com.example.demo.DTO.ImageFiles;
+import com.example.demo.DTO.ImageFilesDTO;
 import com.example.demo.entity.Board;
+import com.example.demo.entity.Image;
 import com.example.demo.service.BoardService;
+import com.example.demo.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -15,6 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class BoardController {
     @Autowired
     private BoardService boardService;
+    @Autowired
+    private ImageService imageService;
 
     @GetMapping("/write")
     public String getWriteForm() {
@@ -22,9 +26,17 @@ public class BoardController {
     }
 
     @PostMapping("/write")
-    public String writeBoard(Board board, @ModelAttribute ImageFiles imageFiles, Model model) throws Exception{
-        imageFiles.getImageFiles().forEach(imageFile -> {
-            System.out.println(imageFile.getOriginalFilename());
+    public String writeBoard(Board board, @ModelAttribute ImageFilesDTO imageFilesDTO, Model model) throws Exception{
+        Board savedBoard = boardService.saveBoard(board);
+
+        imageFilesDTO.getImageFiles().forEach(imageFile -> {
+            if(!imageFile.isEmpty()) {
+                try {
+                    Image savedImage = imageService.saveImage(savedBoard, imageFile);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         });
 
         model.addAttribute("message", "게시글이 등록되었습니다.");
