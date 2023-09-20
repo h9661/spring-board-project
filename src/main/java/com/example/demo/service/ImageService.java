@@ -17,7 +17,6 @@ public class ImageService {
 
     public Image saveImage(Board board, MultipartFile imageFile) throws Exception {
         Image image = new Image();
-        System.out.println(board.getId());
 
         String savingPath = System.getProperty("user.dir") + "/files/";
         String fileName = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
@@ -41,6 +40,24 @@ public class ImageService {
             imageRepository.delete(imageToDelete);
 
             return imageToDelete;
+        }
+    }
+
+    public Image updateImage(Integer id, MultipartFile imageFile) {
+        Image imageToUpdate = imageRepository.findById(id).orElse(null);
+
+        if(imageToUpdate == null) {
+            return null;
+        } else {
+            String savingPath = System.getProperty("user.dir") + "/files/";
+            String fileName = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
+
+            File dest = new File(savingPath + fileName);
+
+            imageToUpdate.setFilename(fileName);
+            imageToUpdate.setFilepath("/files/" + fileName);
+
+            return imageRepository.save(imageToUpdate);
         }
     }
 }
