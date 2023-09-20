@@ -142,6 +142,9 @@ public String exampleMethod(@RequestParam(value = "paramName", defaultValue = "d
 
 `@RequestParam` 어노테이션은 Spring MVC와 함께 주로 사용되며, HTTP 요청의 파라미터 값을 컨트롤러 메서드로 가져오는데 유용합니다.
 
+## @ModelAttribute
+`@ModelAttribute`는 Spring Framework에서 사용되는 어노테이션 중 하나로, 주로 컨트롤러 메서드의 파라미터에 적용됩니다. 이 어노테이션은 HTTP 요청의 파라미터를 자동으로 해당 파라미터 타입의 객체로 변환해줍니다. 이를 통해 컨트롤러 메서드에서 파라미터를 객체로 쉽게 다룰 수 있습니다.
+
 # Repository annotation 정리
 ## @Repository
 `@Repository`는 Spring Framework에서 사용되는 어노테이션으로, 주로 데이터 액세스 계층에서 데이터베이스와의 상호 작용을 담당하는 클래스에 적용됩니다. 이 어노테이션은 Spring의 컴포넌트 스캔 기능과 함께 사용되어 빈으로 등록되며, 데이터 액세스 관련 예외를 스프링의 DataAccessException으로 변환해줍니다.
@@ -274,3 +277,203 @@ public class User {
 
 위의 예제에서 `@GeneratedValue` 어노테이션은 `User` 엔티티 클래스의 `id` 필드에 적용되어 주요 키를 자동으로 생성하고, `strategy` 속성이 `GenerationType.IDENTITY`로 설정되었으므로 데이터베이스의 자동 증가 열을 사용하여 주요 키를 생성합니다. 이것은 일반적으로 MySQL과 같은 데이터베이스에서 사용됩니다.
 
+# ORM
+## @OneToMany
+`@OneToMany` 어노테이션은 JPA(Java Persistence API)에서 사용되는 양방향 관계를 나타내는데 사용됩니다. 주로 엔티티 클래스 간의 1:N(One-to-Many) 또는 N:1(N-to-One) 관계를 매핑할 때 사용됩니다. 아래는 `@OneToMany` 어노테이션의 사용법과 예제입니다.
+
+1. **일대다(1:N) 관계 설정**:
+
+   `@OneToMany` 어노테이션을 사용하여 일대다 관계를 설정할 때는 다음과 같은 기본적인 사용법이 있습니다.
+
+   ```java
+   import javax.persistence.*;
+   import java.util.List;
+   
+   @Entity
+   public class ParentEntity {
+       @Id
+       @GeneratedValue(strategy = GenerationType.IDENTITY)
+       private Long id;
+   
+       // 일대다 관계 설정
+       @OneToMany(mappedBy = "parent")
+       private List<ChildEntity> children;
+       
+       // Getter, Setter, 기타 메서드
+   }
+   ```
+
+   위의 코드에서 `ParentEntity`와 `ChildEntity`는 각각 부모 엔티티와 자식 엔티티를 나타내며, `@OneToMany` 어노테이션을 사용하여 이들 간의 관계를 설정하고 있습니다. `mappedBy` 속성은 자식 엔티티 클래스의 필드명을 지정합니다. 이것은 자식 엔티티가 관계의 주인이 아님을 나타냅니다.
+
+2. **카스케이드 설정**:
+
+   `@OneToMany` 어노테이션을 사용할 때 `cascade` 속성을 설정하여 연관된 엔티티의 상태 변경에 대한 옵션을 지정할 수 있습니다. 예를 들어, 부모 엔티티를 저장할 때 자식 엔티티도 함께 저장하고 싶은 경우 `cascade`를 설정할 수 있습니다.
+
+   ```java
+   @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
+   private List<ChildEntity> children;
+   ```
+
+   위의 코드에서 `cascade = CascadeType.ALL`은 모든 상태 변경(저장, 업데이트, 삭제 등)에 대해 자식 엔티티에도 적용된다는 의미입니다.
+
+3. **Fetch 타입 설정**:
+
+   `@OneToMany` 어노테이션에서 `fetch` 속성을 사용하여 데이터를 가져오는 방식(EAGER 또는 LAZY)을 지정할 수 있습니다. 기본적으로는 LAZY로 설정되어 있으며, 필요한 경우 EAGER로 변경할 수 있습니다.
+
+   ```java
+   @OneToMany(mappedBy = "parent", fetch = FetchType.EAGER)
+   private List<ChildEntity> children;
+   ```
+
+   EAGER로 설정하면 부모 엔티티를 로드할 때 관련된 자식 엔티티도 함께 로드되며, LAZY로 설정하면 자식 엔티티가 실제로 필요한 시점에 로드됩니다.
+
+위의 예제에서는 `@OneToMany` 어노테이션을 사용하여 1:N 관계와 N:1 관계를 설정하고, 관계의 주인과 관련된 필드에 `mappedBy` 속성을 사용하여 엔티티 간의 관계를 정의하고 있습니다. 이를 통해 데이터베이스 스키마와 매핑을 수행하고 JPA를 통해 관련 엔티티를 검색 및 관리할 수 있습니다.
+
+## @ManyToOne
+`@ManyToOne` 어노테이션은 JPA(Java Persistence API)에서 사용되는 양방향 관계를 나타내는데 사용되며, 주로 엔티티 클래스 간의 N:1(N-to-One) 관계를 매핑할 때 사용됩니다. 이 어노테이션을 사용하여 엔티티 간의 관계를 설정하는 방법을 알아보겠습니다.
+
+1. **N:1(N-to-One) 관계 설정**:
+
+   `@ManyToOne` 어노테이션을 사용하여 N:1 관계를 설정할 때는 다음과 같은 기본적인 사용법이 있습니다.
+
+   ```java
+   import javax.persistence.*;
+   
+   @Entity
+   public class ChildEntity {
+       @Id
+       @GeneratedValue(strategy = GenerationType.IDENTITY)
+       private Long id;
+   
+       // N:1 관계 설정
+       @ManyToOne
+       @JoinColumn(name = "parent_id")
+       private ParentEntity parent;
+       
+       // Getter, Setter, 기타 메서드
+   }
+   ```
+
+   위의 코드에서 `ChildEntity`와 `ParentEntity`는 각각 자식 엔티티와 부모 엔티티를 나타내며, `@ManyToOne` 어노테이션을 사용하여 이들 간의 관계를 설정하고 있습니다. `@JoinColumn` 어노테이션을 사용하여 외래 키(Foreign Key)의 이름과 관련된 컬럼을 지정할 수 있습니다.
+
+2. **Fetch 타입 설정**:
+
+   `@ManyToOne` 어노테이션에서 `fetch` 속성을 사용하여 데이터를 가져오는 방식(EAGER 또는 LAZY)을 지정할 수 있습니다. 기본적으로는 EAGER로 설정되어 있으며, 필요한 경우 LAZY로 변경할 수 있습니다.
+
+   ```java
+   @ManyToOne(fetch = FetchType.LAZY)
+   @JoinColumn(name = "parent_id")
+   private ParentEntity parent;
+   ```
+
+   EAGER로 설정하면 관련 부모 엔티티가 실제로 필요한 시점에 로드되며, LAZY로 설정하면 부모 엔티티를 실제로 접근할 때 로드됩니다.
+
+3. **Optional 설정**:
+
+   `@ManyToOne` 어노테이션에서 `optional` 속성을 사용하여 관계가 반드시 존재해야 하는지 아니면 선택적(Optional)인지를 지정할 수 있습니다. 기본적으로 `optional = true`로 설정되어 있으며, 이 경우 관계가 없는 경우 `null`이 될 수 있습니다.
+
+   ```java
+   @ManyToOne(optional = false)
+   @JoinColumn(name = "parent_id")
+   private ParentEntity parent;
+   ```
+
+   `optional = false`로 설정하면 관계가 반드시 존재해야 하므로 `null`이 허용되지 않습니다.
+
+4. **카스케이드 설정**:
+
+   `@ManyToOne` 어노테이션에서 `cascade` 속성을 사용하여 연관된 엔티티의 상태 변경에 대한 옵션을 지정할 수 있습니다. 부모 엔티티를 저장할 때 자식 엔티티도 함께 저장하고 싶은 경우 `cascade`를 설정할 수 있습니다.
+
+   ```java
+   @ManyToOne(cascade = CascadeType.ALL)
+   @JoinColumn(name = "parent_id")
+   private ParentEntity parent;
+   ```
+
+   위의 코드에서 `cascade = CascadeType.ALL`은 모든 상태 변경(저장, 업데이트, 삭제 등)에 대해 자식 엔티티에도 적용된다는 의미입니다.
+
+위의 예제에서는 `@ManyToOne` 어노테이션을 사용하여 N:1 관계를 설정하고, 외래 키(Foreign Key) 컬럼을 `@JoinColumn`을 통해 지정하고 있습니다. 이를 통해 데이터베이스 스키마와 매핑을 수행하고 JPA를 통해 관련 엔티티를 검색 및 관리할 수 있습니다.
+
+## @OneToOne
+`@OneToOne` 어노테이션은 JPA(Java Persistence API)에서 사용하는 양방향 관계를 나타내는데 사용됩니다. 주로 엔티티 간의 1:1(One-to-One) 관계를 매핑할 때 사용됩니다. `@OneToOne` 어노테이션의 사용법과 예제를 살펴보겠습니다.
+
+1. **1:1 관계 설정**:
+
+   `@OneToOne` 어노테이션을 사용하여 1:1 관계를 설정할 때는 다음과 같은 기본적인 사용법이 있습니다.
+
+   ```java
+   import javax.persistence.*;
+   
+   @Entity
+   public class Employee {
+       @Id
+       @GeneratedValue(strategy = GenerationType.IDENTITY)
+       private Long id;
+       private String name;
+   
+       // 1:1 관계 설정
+       @OneToOne(mappedBy = "employee")
+       private Address address;
+       
+       // Getter, Setter, 기타 메서드
+   }
+   ```
+   
+   ```java
+   import javax.persistence.*;
+   
+   @Entity
+   public class Address {
+      @Id
+      @GeneratedValue(strategy = GenerationType.IDENTITY)
+      private Long id;
+      private String street;
+      private String city;
+      private String postalCode;
+   
+       // 1:1 관계 설정
+       @OneToOne
+       @JoinColumn(name = "employee_id")
+       private Employee employee;
+   
+       // Getter, Setter, 기타 메서드
+   }
+   ```
+
+
+   위의 코드에서 `Employee` 엔티티와 `Address` 엔티티는 각각 직원과 주소를 나타내며, `@OneToOne` 어노테이션을 사용하여 이들 간의 관계를 설정하고 있습니다. `mappedBy` 속성은 역방향 관계의 필드 이름을 지정합니다. 이것은 `Address` 엔티티가 관계의 주인이 아님을 나타냅니다.
+
+2. **Fetch 타입 설정**:
+
+   `@OneToOne` 어노테이션에서 `fetch` 속성을 사용하여 데이터를 가져오는 방식(EAGER 또는 LAZY)을 지정할 수 있습니다. 기본적으로는 EAGER로 설정되어 있으며, 필요한 경우 LAZY로 변경할 수 있습니다.
+
+   ```java
+   @OneToOne(mappedBy = "employee", fetch = FetchType.LAZY)
+   private Address address;
+   ```
+
+   EAGER로 설정하면 관련 주소가 실제로 필요한 시점에 로드되며, LAZY로 설정하면 주소를 실제로 접근할 때 로드됩니다.
+
+3. **Optional 설정**:
+
+   `@OneToOne` 어노테이션에서 `optional` 속성을 사용하여 관계가 반드시 존재해야 하는지 아니면 선택적(Optional)인지를 지정할 수 있습니다. 기본적으로 `optional = true`로 설정되어 있으며, 이 경우 관계가 없는 경우 `null`이 될 수 있습니다.
+
+   ```java
+   @OneToOne(mappedBy = "employee", optional = false)
+   private Address address;
+   ```
+
+   `optional = false`로 설정하면 관계가 반드시 존재해야 하므로 `null`이 허용되지 않습니다.
+
+4. **카스케이드 설정**:
+
+   `@OneToOne` 어노테이션에서 `cascade` 속성을 사용하여 연관된 엔티티의 상태 변경에 대한 옵션을 지정할 수 있습니다. 직원을 저장할 때 주소 엔티티도 함께 저장하고 싶은 경우 `cascade`를 설정할 수 있습니다.
+
+   ```java
+   @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL)
+   private Address address;
+   ```
+
+   위의 코드에서 `cascade = CascadeType.ALL`은 모든 상태 변경(저장, 업데이트, 삭제 등)에 대해 주소 엔티티에도 적용된다는 의미입니다.
+
+위의 예제에서는 `@OneToOne` 어노테이션을 사용하여 1:1 관계를 설정하고, `mappedBy` 속성을 사용하여 관계의 주인을 지정하고 있습니다. 이를 통해 데이터베이스 스키마와 매핑을 수행하고 JPA를 통해 관련 엔티티를 검색 및 관리할 수 있습니다.
