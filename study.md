@@ -413,3 +413,7 @@ https://cbw1030.tistory.com/391
        }
    }
    ```
+
+## 양방향 순환 참조 문제
+https://dev-coco.tistory.com/133
+

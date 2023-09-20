@@ -1,5 +1,6 @@
 package com.example.demo.controllers;
 
+import com.example.demo.DTO.ImageDTO;
 import com.example.demo.entity.Image;
 import com.example.demo.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +16,14 @@ public class ImageController {
 
     @PostMapping("/{id}/delete")
     @ResponseBody
-    public ResponseEntity<Image> deleteImage(@PathVariable Integer id) {
+    public ResponseEntity<ImageDTO> deleteImage(@PathVariable Integer id) {
         Image deletedImage = imageService.deleteById(id);
+        ImageDTO imageDTO = new ImageDTO();
 
-        return ResponseEntity.ok(deletedImage);
+        imageDTO.setId(deletedImage.getId());
+        imageDTO.setFilename(deletedImage.getFilename());
+        imageDTO.setFilepath(deletedImage.getFilepath());
+
+        return ResponseEntity.ok(imageDTO);
     }
 }
