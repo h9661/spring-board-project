@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>board View</title>
 </head>
+
 <body>
     <div class="layout">
         <form th:action="@{/board/{id}/update(id=${board.id})}" method="post" enctype="multipart/form-data">
@@ -15,40 +17,10 @@
                 내용
                 <textarea th:text="${board.content}" name="content"></textarea>
             </label>
-            <label>
-                파일
-                <input type="file" name="file" accept="image/*">
-            </label>
             <button type="submit">수정하기</button>
         </form>
-        <div th:each="image: ${board.images}">
-            <img th:src="@{{filepath}(filepath=${image.filepath})}" th:alt="${image.filename}" style="width: 200px; height: 150px">
-            <input type="hidden" th:value="${image.id}">
-            <button type="button">삭제</button>
-        </div>
         <a th:href="@{/board/list}">목록</a>
     </div>
-
-    <script>
-        document.querySelectorAll('button').forEach(function (button) {
-            button.addEventListener('click', function (event) {
-                event.preventDefault();
-                var imageId = event.target.parentNode.querySelector('input').value;
-
-                fetch('/image/' + imageId + '/delete', {
-                    method: 'POST'
-                }).then(async function (response) {
-                    if (response.ok) {
-                        let data = await response.json();
-
-                        alert(`id: ${data.id}, filename: ${data.filename} filepath: ${data.filepath} 삭제 성공!!`);
-                        window.location.reload();
-                    }
-                }).catch(function (error) {
-                    alert(error.message);
-                });
-            });
-        });
-    </script>
 </body>
+
 </html>

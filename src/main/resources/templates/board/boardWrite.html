@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>게시물 작성 폼</title>
 </head>
+
 <body>
-  <div class="layout">
-      <form action="/board/write" method="post" enctype="multipart/form-data">
-          <input type="text" name="title">
-          <textarea name="content"></textarea>
-          <input type="file" name="imageFiles[]" accept="image/*" multiple>
-          <button type="submit">작성</button>
-      </form>
+    <div class="layout">
+        <form action="/board/write" method="post" enctype="multipart/form-data">
+            <input type="text" name="title">
+            <textarea name="content"></textarea>
+            <button type="submit">작성</button>
+        </form>
 
-      <div class="image-preview">
+        <div class="image-preview">
 
-      </div>
-  </div>
+        </div>
+    </div>
 </body>
+
 </html>
