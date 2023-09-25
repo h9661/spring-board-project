@@ -1,10 +1,8 @@
 package com.example.demo.controllers;
 
-import com.example.demo.DTO.ImageFilesDTO;
+import com.example.demo.DTO.BoardDTO;
 import com.example.demo.entity.Board;
-import com.example.demo.entity.Image;
 import com.example.demo.service.BoardService;
-import com.example.demo.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -17,8 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class BoardController {
     @Autowired
     private BoardService boardService;
-    @Autowired
-    private ImageService imageService;
 
     @GetMapping("/write")
     public String getWriteForm() {
@@ -26,18 +22,8 @@ public class BoardController {
     }
 
     @PostMapping("/write")
-    public String writeBoard(Board board, @ModelAttribute ImageFilesDTO imageFilesDTO, Model model) throws Exception{
+    public String writeBoard(BoardDTO board, Model model) throws Exception {
         Board savedBoard = boardService.saveBoard(board);
-
-        imageFilesDTO.getImageFiles().forEach(imageFile -> {
-            if(!imageFile.isEmpty()) {
-                try {
-                    Image savedImage = imageService.saveImage(savedBoard, imageFile);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
 
         model.addAttribute("message", "게시글이 등록되었습니다.");
         model.addAttribute("url", "/board/list");
@@ -60,13 +46,8 @@ public class BoardController {
     }
 
     @PostMapping("/{id}/update")
-    public String updateBoard(@PathVariable Integer id, Board board, MultipartFile file) throws Exception {
-        Board boardToUpdate = boardService.getBoard(id);
-        boardToUpdate.setTitle(board.getTitle());
-        boardToUpdate.setContent(board.getContent());
-
-        // todo: boardService.writeBoard 수정하기
-        // boardService.writeBoard(boardToUpdate, file);
+    public String updateBoard(@PathVariable Integer id, BoardDTO board) throws Exception {
+        boardService.updateBoard(board, id);
 
         return "redirect:/board/list";
     }
