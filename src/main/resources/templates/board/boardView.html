@@ -8,19 +8,56 @@
 
 <body>
     <div class="layout">
-        <form th:action="@{/board/{id}/update(id=${board.id})}" method="post" enctype="multipart/form-data">
+        <label>
+            제목
+            <input type="text" th:value="${board.title}" name="title">
+        </label>
+        <label>
+            내용
+            <textarea th:text="${board.content}" name="content"></textarea>
+        </label>
+        <div id="comments">
+
+        </div>
+        <form th:action="@{/board/{id}/comment(id=${board.id})}" method="post" id="comment-form">
             <label>
-                제목
-                <input type="text" th:value="${board.title}" name="title">
+                댓글
+                <input type="text" id="comment-content" name="content" />
             </label>
-            <label>
-                내용
-                <textarea th:text="${board.content}" name="content"></textarea>
-            </label>
-            <button type="submit">수정하기</button>
+            <button type="submit">댓글 작성</button>
         </form>
         <a th:href="@{/board/list}">목록</a>
     </div>
+
+    <script>
+        document.querySelector("#comment-form").addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            let form = e.target;
+            let content = form.querySelector("#comment-content").value;
+
+            fetch(form.action, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ content })
+            }).then((response) => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error("댓글 작성 실패");
+            }).then((json) => {
+                console.log(json);
+                let comments = document.querySelector("#comments");
+                let comment = document.createElement("div");
+                comment.innerText = json.content;
+                comments.appendChild(comment);
+            }).catch((error) => {
+                alert(error.message);
+            });
+        })
+    </script>
 </body>
 
 </html>

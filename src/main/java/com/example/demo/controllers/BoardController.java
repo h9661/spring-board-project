@@ -3,12 +3,13 @@ package com.example.demo.controllers;
 import com.example.demo.DTO.BoardDTO;
 import com.example.demo.entity.Board;
 import com.example.demo.service.BoardService;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("/board")
@@ -58,5 +59,15 @@ public class BoardController {
         Board deletedBoard = boardService.deleteBoard(id);
 
         return ResponseEntity.ok(deletedBoard);
+    }
+
+    @PostMapping("/{id}/comment")
+    @ResponseBody
+    public ResponseEntity<String> writeComment(@PathVariable Integer id, @RequestBody String content) {
+        Gson gson = new Gson();
+        JsonElement jsonElement = gson.fromJson(content, JsonElement.class);
+        // todo: service에서 처리하도록 수정
+
+        return ResponseEntity.ok(jsonElement.toString());
     }
 }
