@@ -1,6 +1,5 @@
-<link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
-
-<div class="container my-3">
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
     <table class="table">
         <thead class="table-dark">
             <tr>
@@ -21,6 +20,8 @@
 
     <a th:href="@{/board/write}">새 글 작성</a>
 </div>
+
+</html>
 
 <script>
     document.querySelectorAll('button').forEach(function (button) {
