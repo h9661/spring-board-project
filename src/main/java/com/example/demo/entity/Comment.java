@@ -22,9 +22,14 @@ public class Comment {
   @Column(columnDefinition = "TEXT")
   private String content;
 
+  @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
   private LocalDateTime createdAt;
 
   @ManyToOne
   @JoinColumn(name = "board_id")
   private Board board;
+
+  public Comment() {
+    this.createdAt = LocalDateTime.now();
+  }
 }
