@@ -1,10 +1,10 @@
 package com.example.demo.controllers;
 
 import com.example.demo.DTO.BoardDTO;
+import com.example.demo.DTO.CommentDTO;
 import com.example.demo.entity.Board;
+import com.example.demo.entity.Comment;
 import com.example.demo.service.BoardService;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -62,12 +62,12 @@ public class BoardController {
     }
 
     @PostMapping("/{id}/comment")
-    @ResponseBody
-    public ResponseEntity<String> writeComment(@PathVariable Integer id, @RequestBody String content) {
-        Gson gson = new Gson();
-        JsonElement jsonElement = gson.fromJson(content, JsonElement.class);
-        // todo: service에서 처리하도록 수정
+    public String writeComment(@PathVariable Integer id, String content) {
+        CommentDTO commentDTO = new CommentDTO();
+        commentDTO.setContent(content);
 
-        return ResponseEntity.ok(jsonElement.toString());
+        Comment comment = boardService.writeComment(id, commentDTO);
+
+        return "redirect:/board/" + id;
     }
 }

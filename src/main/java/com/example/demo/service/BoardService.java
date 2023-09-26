@@ -1,7 +1,9 @@
 package com.example.demo.service;
 
 import com.example.demo.DTO.BoardDTO;
+import com.example.demo.DTO.CommentDTO;
 import com.example.demo.entity.Board;
+import com.example.demo.entity.Comment;
 import com.example.demo.repository.BoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,6 +48,23 @@ public class BoardService {
             boardRepository.delete(boardToDelete);
 
             return boardToDelete;
+        }
+    }
+
+    public Comment writeComment(Integer id, CommentDTO commentDTO) {
+        Board board = boardRepository.findById(id).orElse(null);
+
+        if (board == null) {
+            return null;
+        } else {
+            Comment comment = new Comment();
+            comment.setBoard(board);
+            comment.setContent(commentDTO.getContent());
+            board.getComments().add(comment);
+
+            boardRepository.save(board);
+
+            return comment;
         }
     }
 }
