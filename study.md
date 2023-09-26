@@ -475,3 +475,7 @@ google의 gson 라이브러리로 파싱하면 된다.
 ## bootstrap
 
 https://wikidocs.net/161459
+
+## thymeleaf template 상속, replace
+
+https://velog.io/@gimminjae/Thymeleaf-%ED%85%9C%ED%94%8C%EB%A6%BF-%EC%83%81%EC%86%8D-%EA%B3%B5%ED%86%B5-%ED%85%9C%ED%94%8C%EB%A6%BF
