@@ -471,3 +471,7 @@ create-drop - create와 동일하다. 하지만 종료시에도 모두 drop 한�
 ## Json으로 전송된 데이터를 Spring에서는 파싱해야 한다.
 
 google의 gson 라이브러리로 파싱하면 된다.
+
+## bootstrap
+
+https://wikidocs.net/161459
