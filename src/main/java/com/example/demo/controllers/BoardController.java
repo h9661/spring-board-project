@@ -23,13 +23,10 @@ public class BoardController {
     }
 
     @PostMapping("/write")
-    public String writeBoard(BoardDTO board, Model model) throws Exception {
+    public String writeBoard(BoardDTO board) throws Exception {
         Board savedBoard = boardService.saveBoard(board);
 
-        model.addAttribute("message", "게시글이 등록되었습니다.");
-        model.addAttribute("url", "/board/list");
-
-        return "board/message";
+        return "redirect:/board/" + savedBoard.getId();
     }
 
     @GetMapping("/list")
