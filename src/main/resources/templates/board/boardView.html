@@ -1,6 +1,5 @@
-<link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
-
-<div class="container my-3">
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
     <!-- Board -->
     <h2 class="border-bottom py-2" th:text="${board.title}"></h2>
     <div class="card my-3">
@@ -31,3 +30,5 @@
 
     <a th:href="@{/board/list}">목록</a>
 </div>
+
+</html>
