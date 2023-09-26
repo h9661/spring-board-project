@@ -1,52 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>board List</title>
-</head>
-<body>
-    <div class="layout">
-        <table>
-            <thead>
-                <tr>
-                    <th>번호</th>
-                    <th>제목</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="board : ${boardList}">
-                    <td th:text="${board.id}"></td>
-                    <td>
-                        <a th:href="@{/board/{id}(id=${board.id})}" th:text="${board.title}"></a>
-                        <button>삭제</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+<link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
 
-        <a th:href="@{/board/write}">새 글 작성</a>
-    </div>
+<div class="container my-3">
+    <table class="table">
+        <thead class="table-dark">
+            <tr>
+                <th>번호</th>
+                <th>제목</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="board : ${boardList}">
+                <td th:text="${board.id}"></td>
+                <td>
+                    <a th:href="@{/board/{id}(id=${board.id})}" th:text="${board.title}"></a>
+                    <button>삭제</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 
-    <script>
-        document.querySelectorAll('button').forEach(function (button) {
-            button.addEventListener('click', function (event) {
-                event.preventDefault();
-                var boardId = event.target.parentNode.parentNode.querySelector('td').innerText;
+    <a th:href="@{/board/write}">새 글 작성</a>
+</div>
 
-                fetch('/board/' + boardId + '/delete', {
-                    method: 'POST'
-                }).then(async function (response) {
-                    if (response.ok) {
-                        let data = await response.json();
+<script>
+    document.querySelectorAll('button').forEach(function (button) {
+        button.addEventListener('click', function (event) {
+            event.preventDefault();
+            var boardId = event.target.parentNode.parentNode.querySelector('td').innerText;
 
-                        alert(`id: ${data.id}, title: ${data.title} content: ${data.content} 삭제 성공!!`);
-                        window.location.reload();
-                    }
-                }).catch(function (error) {
-                    alert(error.message);
-                });
+            fetch('/board/' + boardId + '/delete', {
+                method: 'POST'
+            }).then(async function (response) {
+                if (response.ok) {
+                    let data = await response.json();
+
+                    alert(`id: ${data.id}, title: ${data.title} content: ${data.content} 삭제 성공!!`);
+                    window.location.reload();
+                }
+            }).catch(function (error) {
+                alert(error.message);
             });
         });
-    </script>
-</body>
-</html>
+    });
+</script>
