@@ -12,7 +12,7 @@
                 <td th:text="${board.id}"></td>
                 <td>
                     <a th:href="@{/board/{id}(id=${board.id})}" th:text="${board.title}"></a>
-                    <button>삭제</button>
+                    <button class="delete-board">삭제</button>
                 </td>
             </tr>
         </tbody>
@@ -26,7 +26,7 @@
 </html>
 
 <script>
-    document.querySelectorAll('button').forEach(function (button) {
+    document.querySelectorAll('.delete-board').forEach(function (button) {
         button.addEventListener('click', function (event) {
             event.preventDefault();
             var boardId = event.target.parentNode.parentNode.querySelector('td').innerText;
