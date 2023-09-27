@@ -5,10 +5,14 @@ import com.example.demo.DTO.CommentDTO;
 import com.example.demo.entity.Board;
 import com.example.demo.entity.Comment;
 import com.example.demo.service.BoardService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -18,15 +22,19 @@ public class BoardController {
     private BoardService boardService;
 
     @GetMapping("/write")
-    public String getWriteForm() {
+    public String getWriteForm(BoardDTO boardDTO) {
         return "board/boardWrite";
     }
 
     @PostMapping("/write")
-    public String writeBoard(BoardDTO board) throws Exception {
-        Board savedBoard = boardService.saveBoard(board);
+    public String writeBoard(@Valid BoardDTO boardDTO, BindingResult bindingResult) throws Exception {
+        if (bindingResult.hasErrors()) {
+            return "board/boardWrite";
+        }
 
-        return "redirect:/board/" + savedBoard.getId();
+        Board savedBoard = boardService.saveBoard(boardDTO);
+
+        return "redirect:/board/list";
     }
 
     @GetMapping("/list")
@@ -37,7 +45,7 @@ public class BoardController {
     }
 
     @GetMapping("/{id}")
-    public String getBoard(@PathVariable Integer id, Model model) {
+    public String getBoard(@PathVariable Integer id, Model model, CommentDTO commentDTO) {
         model.addAttribute("board", boardService.getBoard(id));
 
         return "board/boardView";
@@ -59,12 +67,15 @@ public class BoardController {
     }
 
     @PostMapping("/{id}/comment")
-    public String writeComment(@PathVariable Integer id, String content) {
-        CommentDTO commentDTO = new CommentDTO();
-        commentDTO.setContent(content);
+    public String writeComment(@PathVariable Integer id, Model model, @Valid CommentDTO commentDTO,
+            BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            Board board = boardService.getBoard(id);
+            model.addAttribute("board", board);
+            return "board/boardView";
+        }
 
         Comment comment = boardService.writeComment(id, commentDTO);
-
         return "redirect:/board/" + id;
     }
 }
