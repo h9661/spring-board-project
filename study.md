@@ -479,3 +479,42 @@ https://wikidocs.net/161459
 ## thymeleaf template 상속, replace
 
 https://velog.io/@gimminjae/Thymeleaf-%ED%85%9C%ED%94%8C%EB%A6%BF-%EC%83%81%EC%86%8D-%EA%B3%B5%ED%86%B5-%ED%85%9C%ED%94%8C%EB%A6%BF
+
+## spring boot validation
+
+https://adjh54.tistory.com/77
+
+## th:object, th:field
+
+`th:object`와 `th:field`는 Thymeleaf 템플릿 엔진에서 사용되는 특별한 속성입니다. Thymeleaf은 HTML 템플릿 내에서 서버 사이드 데이터를 처리하고 표시하기 위해 사용되며, 이러한 속성들은 템플릿에서 서버 사이드 데이터와 상호 작용하는 데 도움을 줍니다.
+
+1. **th:object**:
+
+   - `th:object` 속성은 HTML 폼 요소나 다른 요소들을 서버 사이드 객체와 연결하는 데 사용됩니다.
+   - 주로 폼 처리에 많이 사용되며, 폼 안에서 어떤 객체를 수정 또는 생성하는지 정의할 때 쓰입니다.
+   - `th:object`는 서버 사이드에서 사용되는 Java 객체를 참조합니다.
+   - 예를 들어, `<form>` 요소 내에서 `th:object`를 사용하여 해당 폼의 데이터를 처리할 Java 객체를 지정할 수 있습니다.
+
+   ```html
+   <form th:object="${user}" method="post">
+     <!-- form fields go here -->
+   </form>
+   ```
+
+   위 예제에서 `${user}`는 Thymeleaf 컨텍스트에서 사용 가능한 서버 사이드 객체를 나타냅니다.
+
+2. **th:field**:
+
+   - `th:field` 속성은 폼 필드를 서버 사이드 객체의 필드와 연결하는 데 사용됩니다.
+   - 주로 `<input>`, `<select>`, `<textarea>` 등의 폼 요소와 함께 사용되며, 이를 통해 데이터 바인딩을 수행합니다.
+   - `th:field`는 폼 필드의 이름을 나타내며, 폼 필드의 이름은 서버 사이드 객체의 필드와 일치해야 합니다.
+
+   ```html
+   <input type="text" th:field="*{username}" />
+   ```
+
+   위 예제에서 `*{username}`는 서버 사이드 객체의 `username` 필드와 해당 `<input>` 필드를 연결합니다.
+
+이러한 Thymeleaf 속성들을 사용하면 HTML 템플릿과 서버 사이드 데이터를 효과적으로 통합하여 동적 웹 페이지를 만들 수 있습니다. Thymeleaf는 Spring Framework와 함께 자주 사용되며, 데이터 바인딩과 템플릿 렌더링을 쉽게 수행할 수 있도록 도와줍니다.
+
+##
