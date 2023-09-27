@@ -9,6 +9,7 @@ import com.example.demo.service.BoardService;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,8 +39,9 @@ public class BoardController {
     }
 
     @GetMapping("/list")
-    public String getBoardList(Model model) {
-        model.addAttribute("boardList", boardService.getBoardList());
+    public String getBoardList(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
+        Page<Board> boardList = boardService.getBoardList(page);
+        model.addAttribute("paging", boardList);
 
         return "board/boardList";
     }

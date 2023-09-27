@@ -6,6 +6,10 @@ import com.example.demo.entity.Board;
 import com.example.demo.entity.Comment;
 import com.example.demo.repository.BoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -31,8 +35,10 @@ public class BoardService {
         return boardRepository.save(newBoard);
     }
 
-    public List<Board> getBoardList() {
-        return boardRepository.findAll();
+    public Page<Board> getBoardList(int page) {
+        List<Sort.Order> sorts = List.of(Sort.Order.desc("createdAt"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        return boardRepository.findAll(pageable);
     }
 
     public Board getBoard(Integer id) {
