@@ -1,14 +1,16 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container">
     <h5 class="my-3 border-bottom pb-2">게시글 등록</h5>
-    <form th:action="@{/board/write}" method="post">
+    <form th:action="@{/board/write}" method="post" th:object="${boardDTO}">
+        <div th:replace="~{form_errors :: formErrorsFragment}"></div>
         <div class="mb-3">
             <label for="title" class="form-label">제목</label>
-            <input type="text" class="form-control" id="title" name="title" placeholder="제목을 입력하세요">
+            <input type="text" class="form-control" id="title" name="title" th:field="*{title}" placeholder="제목을 입력하세요">
         </div>
         <div class="mb-3">
             <label for="content" class="form-label">내용</label>
-            <textarea class="form-control" id="content" name="content" rows="5" placeholder="내용을 입력하세요"></textarea>
+            <textarea class="form-control" id="content" name="content" th:field="*{content}" rows="5"
+                placeholder="내용을 입력하세요"></textarea>
         </div>
         <input type="submit" class="btn btn-primary" value="등록">
     </form>
