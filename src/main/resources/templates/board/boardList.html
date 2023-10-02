@@ -14,6 +14,9 @@
                 <td>
                     <a th:href="@{/board/{id}(id=${board.id})}" th:text="${board.title}"></a>
                     <button class="delete-board">삭제</button>
+                    <span class="text-danger small ms-2" th:if="${#lists.size(board.comments) > 0}"
+                        th:text="${#lists.size(board.comments)}">
+                    </span>
                 </td>
                 <td>
                     <span th:text="${#temporals.format(board.createdAt, 'yyyy-MM-dd HH:mm')}"></span>
