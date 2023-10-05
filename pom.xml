@@ -78,6 +78,19 @@
 			<artifactId>gson</artifactId>
 		</dependency>
 
+		<!-- spring boot security -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
+		<!-- thymeleaf for spring boot security -->
+		<dependency>
+			<groupId>org.thymeleaf.extras</groupId>
+			<artifactId>thymeleaf-extras-springsecurity6</artifactId>
+		</dependency>
+
+
 	</dependencies>
 
 	<build>
