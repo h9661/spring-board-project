@@ -370,19 +370,17 @@ MySQL에서 테이블을 변경하는 방법은 여러 가지가 있습니다. �
 ## 사진 업로드 미리보기
 
 ```jsx
-document
-  .querySelector('input[type="file"]')
-  .addEventListener("change", function (event) {
-    var img = document.querySelector("#img-preview");
-    var file = event.target.files[0];
-    var reader = new FileReader();
+document.querySelector('input[type="file"]').addEventListener("change", function (event) {
+  var img = document.querySelector("#img-preview");
+  var file = event.target.files[0];
+  var reader = new FileReader();
 
-    reader.onload = function (e) {
-      img.setAttribute("src", e.target.result);
-    };
+  reader.onload = function (e) {
+    img.setAttribute("src", e.target.result);
+  };
 
-    reader.readAsDataURL(file);
-  });
+  reader.readAsDataURL(file);
+});
 ```
 
 이 코드는 HTML과 JavaScript를 사용하여 파일 업로드(input 태그) 이벤트를 처리하고, 선택한 이미지 파일을 미리보기로 표시하는 간단한 스크립트입니다. 코드의 주요 부분을 설명하겠습니다:
@@ -576,3 +574,52 @@ Thymeleaf는 HTML 템플릿에서 서버측 데이터를 표시하고 조작하�
      <p th:text="${#request.getParameter('name')}">John Doe</p>
      ```
      이 예제에서 `${#request.getParameter('name')}`은 `name` 파라미터의 값을 출력합니다.
+
+## spring security
+
+Spring Security는 Spring 기반의 애플리케이션에서 인증(Authentication)과 권한 부여(Authorization)를 관리하기 위한 강력한 보안 프레임워크입니다. Spring Security를 사용하면 웹 애플리케이션과 RESTful 서비스를 보호하고, 사용자 인증, 권한 검사, 세션 관리, CSRF(사이트 간 요청 위조) 방어 등을 쉽게 구현할 수 있습니다.
+
+Spring Security의 주요 기능과 개념은 다음과 같습니다:
+
+1. **Authentication(인증)**:
+
+   - 사용자가 자신의 신원을 증명하고 시스템에 로그인할 수 있도록 합니다.
+   - 사용자 인증 방식으로는 기본적으로 사용자 이름과 비밀번호, 토큰 기반의 인증, OAuth2와 같은 외부 인증 서비스를 지원합니다.
+
+2. **Authorization(권한 부여)**:
+
+   - 인증된 사용자에게 어떤 작업과 리소스에 대한 권한을 부여하는 것을 관리합니다.
+   - 역할 기반 및 규칙 기반의 접근 제어를 제공합니다.
+
+3. **Session Management(세션 관리)**:
+
+   - 사용자 세션을 관리하고, 동시 로그인을 제한하거나 세션 고정 공격에 대비합니다.
+
+4. **CSRF Protection(Cross-Site Request Forgery 방어)**:
+
+   - 악의적인 웹사이트에서 인증된 사용자의 권한으로 CSRF 공격을 시도하는 것을 방어합니다.
+
+5. **Password Encoding(비밀번호 암호화)**:
+
+   - 사용자 비밀번호를 안전하게 저장하기 위한 암호화 방식을 제공합니다.
+
+6. **Custom Authentication Providers(사용자 정의 인증 프로바이더)**:
+   - 사용자 정의 인증 로직을 구현할 수 있도록 허용합니다.
+
+Spring Security 설정은 Spring 기반 프로젝트에서 다음과 같이 수행됩니다:
+
+1. **의존성 추가**: Maven 또는 Gradle 프로젝트에서 Spring Security 의존성을 추가합니다.
+
+2. **Security Configuration 클래스 생성**: `SecurityConfig`와 같은 설정 클래스를 만들어 Spring Security의 구성을 정의합니다. 이 클래스는 `SecurityConfigurerAdapter` 클래스를 확장하거나 `@EnableWebSecurity` 어노테이션을 사용하여 구성할 수 있습니다.
+
+3. **보안 규칙 정의**: URL 경로, 권한, 인증 방식 등을 정의하여 보안 규칙을 설정합니다.
+
+4. **사용자 인증 및 권한 부여**: 사용자의 인증 정보를 제공하고, 권한을 설정합니다. 이는 메모리 기반, 데이터베이스 기반 또는 사용자 정의 인증 프로바이더를 통해 수행됩니다.
+
+5. **로그인 및 로그아웃 설정**: 로그인 페이지, 로그아웃 URL 및 세션 관리와 관련된 설정을 구성합니다.
+
+6. **CSRF 방어 및 기타 설정**: CSRF 토큰, 예외 처리 및 보안 헤더와 관련된 추가 설정을 수행합니다.
+
+7. **Spring Security 사용**: 설정이 완료되면 Spring Security를 사용하여 웹 애플리케이션 또는 RESTful 서비스에서 인증 및 권한 부여를 수행합니다.
+
+Spring Security의 구체적인 설정 및 사용법은 프로젝트의 요구 사항과 종류에 따라 다를 수 있으므로, 보다 구체적인 설정 및 예제 코드는 공식 Spring Security 문서 및 튜토리얼을 참고하는 것이 좋습니다.
