@@ -3,7 +3,6 @@ package com.example.demo.controllers;
 import com.example.demo.DTO.BoardDTO;
 import com.example.demo.DTO.CommentDTO;
 import com.example.demo.entity.Board;
-import com.example.demo.entity.Comment;
 import com.example.demo.service.BoardService;
 
 import jakarta.validation.Valid;
@@ -33,7 +32,7 @@ public class BoardController {
             return "board/boardWrite";
         }
 
-        Board savedBoard = boardService.saveBoard(boardDTO);
+        boardService.saveBoard(boardDTO);
 
         return "redirect:/board/list";
     }
@@ -77,7 +76,7 @@ public class BoardController {
             return "board/boardView";
         }
 
-        Comment comment = boardService.writeComment(id, commentDTO);
+        boardService.writeComment(id, commentDTO);
         return "redirect:/board/" + id;
     }
 }
