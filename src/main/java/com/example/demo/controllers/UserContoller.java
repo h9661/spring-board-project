@@ -20,6 +20,11 @@ public class UserContoller {
   @Autowired
   private UserService userService;
 
+  @GetMapping("/login")
+  public String login() {
+    return "user/login";
+  }
+
   @GetMapping("/signup")
   public String signup(UserDTO userDTO) {
     return "user/signup";
