@@ -2,6 +2,8 @@ package com.example.demo.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,8 +25,8 @@ public class SecurityConfig {
                                                                                                         // h2-console
                 .headers((headers) -> headers.frameOptions((frameOptions) -> frameOptions.disable())) // disable
                                                                                                       // frameOptions
-                .formLogin((formLogin) -> formLogin.permitAll()) // permit all form login
-                .logout((logout) -> logout.permitAll()); // permit all logout
+                .formLogin((formLogin) -> formLogin.loginPage("/user/login").defaultSuccessUrl("/board/list")) // permit all form login
+                .logout((logout) -> logout.logoutRequestMatcher(new AntPathRequestMatcher("/user/logout")).logoutSuccessUrl("/board/list").invalidateHttpSession(true)); // permit all logout
 
         ;
         return http.build();
@@ -33,5 +35,10 @@ public class SecurityConfig {
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager(); 
     }
 }
