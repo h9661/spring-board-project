@@ -26,7 +26,7 @@ public class SecurityConfig {
                 .headers((headers) -> headers.frameOptions((frameOptions) -> frameOptions.disable())) // disable
                                                                                                       // frameOptions
                 .formLogin((formLogin) -> formLogin.loginPage("/user/login").defaultSuccessUrl("/board/list")) // permit all form login
-                .logout((logout) -> logout.permitAll()); // permit all logout
+                .logout((logout) -> logout.logoutRequestMatcher(new AntPathRequestMatcher("/user/logout")).logoutSuccessUrl("/board/list").invalidateHttpSession(true)); // permit all logout
 
         ;
         return http.build();
