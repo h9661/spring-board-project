@@ -11,4 +11,6 @@ public class CommentDTO {
   String content;
   BoardDTO boardDTO;
   LocalDateTime createdAt;
+
+  Integer userId;
 }
