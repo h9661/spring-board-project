@@ -29,6 +29,11 @@ public class Comment {
   @JoinColumn(name = "board_id")
   private Board board;
 
+  // N:1 mapping with User
+  @ManyToOne
+  @JoinColumn(name = "user_id")
+  private User user;
+
   public Comment() {
     this.createdAt = LocalDateTime.now();
   }
