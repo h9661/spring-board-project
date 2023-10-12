@@ -25,6 +25,11 @@ public class Board {
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<Comment> comments;
 
+    // N:1 mapping with User
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public Board() {
         this.createdAt = LocalDateTime.now();
     }

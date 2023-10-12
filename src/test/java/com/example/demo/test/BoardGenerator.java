@@ -19,7 +19,7 @@ public class BoardGenerator {
       BoardDTO board = new BoardDTO();
       board.setTitle("제목" + i);
       board.setContent("내용" + i);
-      boardService.saveBoard(board);
+      boardService.saveBoard(board, null);
     }
   }
 }

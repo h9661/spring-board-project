@@ -3,13 +3,17 @@ package com.example.demo.controllers;
 import com.example.demo.DTO.BoardDTO;
 import com.example.demo.DTO.CommentDTO;
 import com.example.demo.entity.Board;
+import com.example.demo.entity.User;
 import com.example.demo.service.BoardService;
+import com.example.demo.service.UserService;
 
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import java.security.Principal;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,19 +24,24 @@ import org.springframework.web.bind.annotation.*;
 public class BoardController {
     @Autowired
     private BoardService boardService;
+    @Autowired
+    private UserService userService;
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/write")
     public String getWriteForm(BoardDTO boardDTO) {
         return "board/boardWrite";
     }
 
     @PostMapping("/write")
-    public String writeBoard(@Valid BoardDTO boardDTO, BindingResult bindingResult) throws Exception {
+    public String writeBoard(@Valid BoardDTO boardDTO, BindingResult bindingResult, Principal principal)
+            throws Exception {
         if (bindingResult.hasErrors()) {
             return "board/boardWrite";
         }
 
-        boardService.saveBoard(boardDTO);
+        User user = userService.getUserByUsername(principal.getName());
+        boardService.saveBoard(boardDTO, user);
 
         return "redirect:/board/list";
     }
@@ -67,16 +76,17 @@ public class BoardController {
         return ResponseEntity.ok(deletedBoard);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/{id}/comment")
     public String writeComment(@PathVariable Integer id, Model model, @Valid CommentDTO commentDTO,
-            BindingResult bindingResult) {
+            BindingResult bindingResult, Principal principal) {
         if (bindingResult.hasErrors()) {
             Board board = boardService.getBoard(id);
             model.addAttribute("board", board);
             return "board/boardView";
         }
-
-        boardService.writeComment(id, commentDTO);
+        User user = userService.getUserByUsername(principal.getName());
+        boardService.writeComment(id, commentDTO, user);
         return "redirect:/board/" + id;
     }
 }

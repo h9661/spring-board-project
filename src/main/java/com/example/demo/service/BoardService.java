@@ -4,6 +4,7 @@ import com.example.demo.DTO.BoardDTO;
 import com.example.demo.DTO.CommentDTO;
 import com.example.demo.entity.Board;
 import com.example.demo.entity.Comment;
+import com.example.demo.entity.User;
 import com.example.demo.repository.BoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,10 +19,11 @@ public class BoardService {
     @Autowired
     private BoardRepository boardRepository;
 
-    public Board saveBoard(BoardDTO board) {
+    public Board saveBoard(BoardDTO board, User user) {
         Board newBoard = new Board();
         newBoard.setContent(board.getContent());
         newBoard.setTitle(board.getTitle());
+        newBoard.setUser(user);
 
         return boardRepository.save(newBoard);
     }
@@ -57,7 +59,7 @@ public class BoardService {
         }
     }
 
-    public Comment writeComment(Integer id, CommentDTO commentDTO) {
+    public Comment writeComment(Integer id, CommentDTO commentDTO, User user) {
         Board board = boardRepository.findById(id).orElse(null);
 
         if (board == null) {
@@ -66,6 +68,7 @@ public class BoardService {
             Comment comment = new Comment();
             comment.setBoard(board);
             comment.setContent(commentDTO.getContent());
+            comment.setUser(user);
             board.getComments().add(comment);
 
             boardRepository.save(board);

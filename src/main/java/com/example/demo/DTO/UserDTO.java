@@ -1,5 +1,7 @@
 package com.example.demo.DTO;
 
+import java.util.List;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
@@ -16,4 +18,7 @@ public class UserDTO {
   @NotEmpty(message = "이메일을 입력해주세요.")
   @Email(message = "이메일 형식에 맞지 않습니다.")
   String email;
+
+  List<BoardDTO> boards;
+  List<CommentDTO> comments;
 }

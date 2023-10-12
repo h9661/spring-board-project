@@ -12,4 +12,6 @@ public class BoardDTO {
 
     @NotEmpty(message = "내용을 입력해주세요.")
     String content;
+
+    Integer userId;
 }
