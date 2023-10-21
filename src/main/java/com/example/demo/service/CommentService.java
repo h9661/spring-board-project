@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import java.time.LocalDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,7 @@ public class CommentService {
   public Comment updateComment(Integer id, CommentDTO commentDTO) {
     Comment comment = getComment(id);
     comment.setContent(commentDTO.getContent());
+    comment.setUpdatedAt(LocalDateTime.now());
     return commentRepository.save(comment);
   }
 }
