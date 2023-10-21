@@ -25,6 +25,9 @@ public class Comment {
   @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
   private LocalDateTime createdAt;
 
+  @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+  private LocalDateTime updatedAt;
+
   @ManyToOne
   @JoinColumn(name = "board_id")
   private Board board;

@@ -6,6 +6,10 @@
         <div class="card-body">
             <div class="card-text" style="white-space: pre-line;" th:text="${board.content}"></div>
             <div class="d-flex justify-content-end">
+                <div th:if="${board.updatedAt != null}" class="badge bg-light text-dark p-2 text-start mx-3">
+                    <div class="mb-2">updated at</div>
+                    <div th:text="${#temporals.format(board.updatedAt, 'yyyy-MM-dd HH:mm')}"></div>
+                </div>
                 <div class="badge bg-light text-dark p-2 text-start">
                     <div class="mb-2">
                         <span th:if="${board.user != null}" th:text="${board.user.username}"></span>
@@ -24,11 +28,25 @@
     <div class="card my-3" th:each="comment : ${board.comments}">
         <div class="card-text" style="white-space: pre-line;" th:text="${comment.content}"></div>
         <div class="d-flex justify-content-end">
+            <div th:if="${comment.updatedAt != null}" class="badge bg-light text-dark p-2 text-start mx-3">
+                <div class="mb-2">updated at</div>
+                <div th:text="${#temporals.format(comment.updatedAt, 'yyyy-MM-dd HH:mm')}"></div>
+            </div>
             <div class="badge bg-light text-dark p-2 text-start">
                 <div class="mb-2">
                     <span th:if="${comment.user != null}" th:text="${comment.user.username}"></span>
                 </div>
                 <div th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}"></div>
+            </div>
+            <div class="my-3">
+                <a th:href="@{|/board/${board.id}/comment/${comment.id}/update|}"
+                    class="btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()"
+                    th:if="${comment.user != null and #authentication.getPrincipal().getUsername() == comment.user.username}"
+                    th:text="수정"></a>
+                <a th:href="@{|/board/${board.id}/comment/${comment.id}/delete|}"
+                    class="delete btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()"
+                    th:if="${comment.user != null and #authentication.getPrincipal().getUsername() == comment.user.username}"
+                    th:text="삭제"></a>
             </div>
         </div>
     </div>
