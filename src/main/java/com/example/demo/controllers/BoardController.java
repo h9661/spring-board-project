@@ -3,8 +3,10 @@ package com.example.demo.controllers;
 import com.example.demo.DTO.BoardDTO;
 import com.example.demo.DTO.CommentDTO;
 import com.example.demo.entity.Board;
+import com.example.demo.entity.Comment;
 import com.example.demo.entity.User;
 import com.example.demo.service.BoardService;
+import com.example.demo.service.CommentService;
 import com.example.demo.service.UserService;
 
 import jakarta.validation.Valid;
@@ -13,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.security.Principal;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +29,8 @@ public class BoardController {
     private BoardService boardService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private CommentService commentService;
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/write")
@@ -117,6 +120,49 @@ public class BoardController {
         }
         User user = userService.getUserByUsername(principal.getName());
         boardService.writeComment(id, commentDTO, user);
+        return "redirect:/board/" + id;
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/{id}/comment/{commentId}/delete")
+    public String deleteComment(@PathVariable Integer id, @PathVariable Integer commentId, Principal principal) {
+        Board board = boardService.getBoard(id);
+        if (!board.getUser().getUsername().equals(principal.getName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
+        }
+
+        commentService.deleteComment(commentId);
+        return "redirect:/board/" + id;
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/{id}/comment/{commentId}/update")
+    public String getUpdateCommentForm(@PathVariable Integer id, @PathVariable Integer commentId, Model model,
+            Principal principal) {
+        Board board = boardService.getBoard(id);
+        if (!board.getUser().getUsername().equals(principal.getName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
+        }
+
+        CommentDTO commentDTO = new CommentDTO();
+        Comment comment = commentService.getComment(commentId);
+
+        commentDTO.setContent(comment.getContent());
+        model.addAttribute("commentDTO", commentDTO);
+
+        return "board/commentUpdate";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/{id}/comment/{commentId}/update")
+    public String updateComment(@PathVariable Integer id, @PathVariable Integer commentId,
+            @Valid CommentDTO commentDTO, BindingResult bindingResult) throws Exception {
+        if (bindingResult.hasErrors()) {
+            return "board/commentUpdate";
+        }
+
+        commentService.updateComment(commentId, commentDTO);
+
         return "redirect:/board/" + id;
     }
 }
