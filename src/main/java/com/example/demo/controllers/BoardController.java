@@ -94,12 +94,16 @@ public class BoardController {
         return "redirect:/board/list";
     }
 
-    @PostMapping("/{id}/delete")
-    @ResponseBody
-    public ResponseEntity<Board> deleteBoard(@PathVariable Integer id) {
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/{id}/delete")
+    public String deleteBoard(@PathVariable Integer id, Principal principal) {
         Board deletedBoard = boardService.deleteBoard(id);
+        if (!deletedBoard.getUser().getUsername().equals(principal.getName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
+        }
 
-        return ResponseEntity.ok(deletedBoard);
+        boardService.deleteBoard(id);
+        return "redirect:/board/list";
     }
 
     @PreAuthorize("isAuthenticated()")
