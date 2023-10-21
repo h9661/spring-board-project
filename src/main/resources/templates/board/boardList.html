@@ -7,7 +7,7 @@
                 <th>제목</th>
                 <th>글쓴이</th>
                 <th>등록일자</th>
-                <th>수정</th>
+                <th>수정/삭제</th>
             </tr>
         </thead>
         <tbody>
@@ -30,6 +30,10 @@
                         sec:authorize="isAuthenticated()"
                         th:if="${board.user != null and #authentication.getPrincipal().getUsername() == board.user.username}"
                         th:text="수정"></a>
+                    <a th:href="@{|/board/${board.id}/delete|}" class="btn btn-sm btn-outline-secondary"
+                        sec:authorize="isAuthenticated()"
+                        th:if="${board.user != null and #authentication.getPrincipal().getUsername() == board.user.username}"
+                        th:text="삭제"></a>
                 </td>
             </tr>
         </tbody>
