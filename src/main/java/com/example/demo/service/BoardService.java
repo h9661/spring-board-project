@@ -12,6 +12,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -29,12 +31,17 @@ public class BoardService {
     }
 
     public Board updateBoard(BoardDTO board, Integer id) {
-        Board newBoard = new Board();
-        newBoard.setId(id);
-        newBoard.setContent(board.getContent());
-        newBoard.setTitle(board.getTitle());
+        Board updateBoard = boardRepository.findById(id).orElse(null);
 
-        return boardRepository.save(newBoard);
+        if (updateBoard == null) {
+            return null;
+        }
+
+        updateBoard.setContent(board.getContent());
+        updateBoard.setTitle(board.getTitle());
+        updateBoard.setUpdatedAt(LocalDateTime.now());
+
+        return boardRepository.save(updateBoard);
     }
 
     public Page<Board> getBoardList(int page) {

@@ -12,12 +12,14 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.security.Principal;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @Controller
 @RequestMapping("/board")
@@ -61,8 +63,32 @@ public class BoardController {
         return "board/boardView";
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/{id}/update")
+    public String getUpdateForm(@PathVariable Integer id, Model model, Principal principal) {
+        Board board = boardService.getBoard(id);
+        if (!board.getUser().getUsername().equals(principal.getName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
+        }
+
+        BoardDTO boardDTO = new BoardDTO();
+
+        boardDTO.setTitle(board.getTitle());
+        boardDTO.setContent(board.getContent());
+        boardDTO.setUserId(board.getUser().getId());
+
+        model.addAttribute("boardDTO", boardDTO);
+
+        return "board/boardWrite";
+    }
+
     @PostMapping("/{id}/update")
-    public String updateBoard(@PathVariable Integer id, BoardDTO board) throws Exception {
+    public String updateBoard(@PathVariable Integer id, @Valid BoardDTO board, BindingResult bindingResult)
+            throws Exception {
+        if (bindingResult.hasErrors()) {
+            return "board/boardWrite";
+        }
+
         boardService.updateBoard(board, id);
 
         return "redirect:/board/list";
