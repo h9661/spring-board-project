@@ -7,6 +7,7 @@
                 <th>제목</th>
                 <th>글쓴이</th>
                 <th>등록일자</th>
+                <th>수정</th>
             </tr>
         </thead>
         <tbody>
@@ -14,7 +15,6 @@
                 <td th:text="${board.id}"></td>
                 <td>
                     <a th:href="@{/board/{id}(id=${board.id})}" th:text="${board.title}"></a>
-                    <button class="delete-board">삭제</button>
                     <span class="text-danger small ms-2" th:if="${#lists.size(board.comments) > 0}"
                         th:text="${#lists.size(board.comments)}">
                     </span>
@@ -24,6 +24,12 @@
                 </td>
                 <td>
                     <span th:text="${#temporals.format(board.createdAt, 'yyyy-MM-dd HH:mm')}"></span>
+                </td>
+                <td>
+                    <a th:href="@{|/board/${board.id}/update|}" class="btn btn-sm btn-outline-secondary"
+                        sec:authorize="isAuthenticated()"
+                        th:if="${board.user != null and #authentication.getPrincipal().getUsername() == board.user.username}"
+                        th:text="수정"></a>
                 </td>
             </tr>
         </tbody>
@@ -57,25 +63,3 @@
 </div>
 
 </html>
-
-<script>
-    document.querySelectorAll('.delete-board').forEach(function (button) {
-        button.addEventListener('click', function (event) {
-            event.preventDefault();
-            var boardId = event.target.parentNode.parentNode.querySelector('td').innerText;
-
-            fetch('/board/' + boardId + '/delete', {
-                method: 'POST'
-            }).then(async function (response) {
-                if (response.ok) {
-                    let data = await response.json();
-
-                    alert(`id: ${data.id}, title: ${data.title} content: ${data.content} 삭제 성공!!`);
-                    window.location.reload();
-                }
-            }).catch(function (error) {
-                alert(error.message);
-            });
-        });
-    });
-</script>
